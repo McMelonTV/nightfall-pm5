@@ -1,0 +1,439 @@
+name: Nightfall
+main: AndreasHGK\Core\Core
+version: 1.0.0
+api: 5.0.0
+php: 8.2
+load: POSTWORLD
+author: AndreasHGK
+description: NightFall Core Plugin
+depend: [RankSystem]
+
+permissions:
+  nightfall:
+    default: op
+  nightfall.staffchat:
+    default: op
+  nightfall.staffchat.see:
+    default: op
+  nightfall.staffchat.send:
+    default: op
+  nightfall.tag.colored:
+    default: op
+  nightfall.chat:
+    default: op
+  nightfall.chat.colored:
+    default: op
+  nightfall.command:
+    default: op
+  nightfall.command.koth:
+    default: true
+  nightfall.command.setrank:
+    default: op
+  nightfall.command.setprestige:
+    default: op
+    description: "setprestige"
+  nightfall.command.setmine:
+    default: op
+    description: "setmine"
+  nightfall.command.balance:
+    default: true
+    description: "balance"
+  nightfall.command.ranks:
+    default: true
+    description: "ranks"
+  nightfall.command.spawn:
+    default: true
+    description: "spawn"
+  nightfall.command.setbalance:
+    default: op
+    description: "setbalance"
+  nightfall.command.rankup:
+    default: true
+    description: "rankup"
+  nightfall.command.pay:
+    default: op
+    description: "pay someone"
+  nightfall.command.nick:
+    default: op
+    description: "change your nickname"
+  nightfall.command.nick.others:
+    default: op
+    description: "change someone else's nickname"
+  nightfall.command.nicklist:
+    default: true
+    description: "nicklist"
+  nightfall.command.fly:
+    default: op
+    description: "toggle flight mode"
+  nightfall.command.baltop:
+    default: true
+    description: "see the leaderboard for money"
+  nightfall.command.leaderboard:
+    default: true
+    description: "see the leaderboards"
+  nightfall.command.customenchant:
+    default: op
+    description: "apply custom enchants"
+  nightfall.command.alias:
+    default: op
+    description: "alias"
+  nightfall.command.vault:
+    default: true
+    description: "open your vault"
+  nightfall.command.vault.others:
+    default: op
+    description: "edit someone else's vault"
+  nightfall.command.size:
+    default: op
+    description: "change your size"
+  nightfall.command.stats:
+    default: true
+    description: "see someones stats"
+  nightfall.command.feed:
+    default: op
+    description: "feed someone"
+  nightfall.command.feed.others:
+    default: op
+    description: "feed someone else"
+  nightfall.command.commandspy:
+    default: op
+    description: "commandspy"
+  nightfall.command.shop:
+    default: true
+    description: "buy items"
+  nightfall.command.afk:
+    default: true
+    description: "afk"
+  nightfall.command.checkip:
+    default: op
+    description: "checkip"
+  nightfall.command.inventorysee:
+    default: op
+    description: "inventorysee"
+  nightfall.command.help:
+    default: true
+    description: "help"
+  nightfall.command.plugins:
+    default: true
+    description: "plugins"
+  nightfall.command.tell:
+    default: true
+    description: "tell"
+  nightfall.command.list:
+    default: true
+    description: "list"
+  nightfall.command.world:
+    default: op
+    description: "world"
+  nightfall.command.setspawn:
+    default: op
+    description: "setspawn"
+  nightfall.command.regenerate:
+    default: op
+    description: "regenerate"
+  nightfall.command.mycoords:
+    default: op
+    description: "mycoords"
+  nightfall.command.regenerateall:
+    default: op
+    description: "regenall"
+  nightfall.command.admin:
+    default: op
+    description: "admin"
+  nightfall.command.achievements:
+    default: true
+    description: "achievements"
+  nightfall.command.me:
+    default: op
+    description: "me"
+  nightfall.command.mute:
+    default: op
+    description: "mute"
+  nightfall.command.sudo:
+    default: op
+    description: "sudo"
+  nightfall.command.convertworld:
+    default: op
+    description: "convertworld"
+  nightfall.command.id:
+    default: op
+    description: "id"
+  nightfall.command.renameworld:
+    default: op
+    description: "renameworld"
+  nightfall.command.mine:
+    default: true
+    description: "mine"
+  nightfall.command.mines:
+    default: true
+    description: "mines"
+  nightfall.command.disablemine:
+    default: op
+    description: "disablemine"
+  nightfall.command.enablemine:
+    default: op
+    description: "enablemine"
+  nightfall.command.clearmine:
+    default: op
+    description: "clearmine"
+  nightfall.command.tags:
+    default: true
+    description: "tags"
+  nightfall.command.givetag:
+    default: op
+    description: "givetag"
+  nightfall.command.say:
+    default: op
+    description: "say"
+  nightfall.command.auction:
+    default: true
+    description: "auction"
+  nightfall.command.auction.sell:
+    default: true
+    description: "sell"
+  nightfall.command.ban:
+    default: op
+    description: "ban"
+  nightfall.command.unban:
+    default: op
+    description: "unban"
+  nightfall.command.tempban:
+    default: op
+    description: "tempban"
+  nightfall.command.plot:
+    default: true
+    description: "plot"
+  nightfall.command.plot.claim:
+    default: true
+    description: "claim"
+  nightfall.command.plot.unclaim:
+    default: true
+    description: "unclaim"
+  nightfall.command.plot.clear:
+    default: true
+    description: "clear"
+  nightfall.command.plot.addmember:
+    default: true
+    description: "addmember"
+  nightfall.command.plot.removemember:
+    default: true
+    description: "removemember"
+  nightfall.command.plot.teleport:
+    default: true
+    description: "teleport"
+  nightfall.command.plot.info:
+    default: true
+    description: "info"
+  nightfall.command.plot.list:
+    default: true
+    description: "info"
+  nightfall.command.plot.rename:
+    default: true
+    description: "rename"
+  nightfall.command.plot.blockplayer:
+    default: true
+    description: ""
+  nightfall.command.plot.unblockplayer:
+    default: true
+    description: ""
+  nightfall.command.plot.autoclaim:
+    default: true
+    description: ""
+  nightfall.command.block:
+    default: true
+    description: "block"
+  nightfall.command.unblock:
+    default: true
+    description: "unblock"
+  nightfall.command.blocklist:
+    default: true
+    description: "blocklist"
+  nightfall.command.globalmute:
+    default: op
+    description: "globalmute"
+  nightfall.command.clearinventory:
+    default: op
+    description: "clearinventory"
+  nightfall.command.plots:
+    default: true
+    description: "plots"
+  nightfall.command.nfitem:
+    default: op
+    description: "nfitem"
+  nightfall.command.gang:
+    default: true
+    description: "gang"
+  nightfall.command.gang.create:
+    default: true
+    description: "create"
+  nightfall.command.gang.disband:
+    default: true
+    description: "disband"
+  nightfall.command.gang.info:
+    default: true
+    description: "info"
+  nightfall.command.gang.accept:
+    default: true
+    description: "accept"
+  nightfall.command.gang.ally:
+    default: true
+    description: "ally"
+  nightfall.command.gang.enemy:
+    default: true
+    description: "enemy"
+  nightfall.command.gang.promote:
+    default: true
+    description: "promote"
+  nightfall.command.gang.demote:
+    default: true
+    description: "demote"
+  nightfall.command.gang.kick:
+    default: true
+    description: "kick"
+  nightfall.command.gang.invite:
+    default: true
+    description: "invite"
+  nightfall.command.gang.setdescription:
+    default: true
+    description: "set description"
+  nightfall.command.gang.leave:
+    default: true
+    description: "leave"
+  nightfall.command.gang.forcekick:
+    default: op
+    description: "forcekick"
+  nightfall.command.forge:
+    default: true
+    description: "forge"
+  nightfall.command.prestige:
+    default: true
+    description: "prestige"
+  nightfall.command.fix:
+    default: op
+    description: "fix"
+  nightfall.command.performance:
+    default: op
+    description: "performance"
+  nightfall.command.enchantmentforge:
+    default: true
+    description: "enchantmentforge"
+  nightfall.command.ping:
+    default: true
+    description: "ping"
+  nightfall.command.teleport:
+    default: op
+    description: "tp"
+  nightfall.command.guide:
+    default: true
+    description: "guide"
+  nightfall.command.setmaxplots:
+    default: op
+    description: "maxplot"
+  nightfall.command.setmaxauc:
+    default: op
+    description: "maxauc"
+  nightfall.command.setmaxvaults:
+    default: op
+    description: "maxvaults"
+  nightfall.command.seasonreset:
+    default: op
+    description: "seasonreset"
+  nightfall.command.kit:
+    default: true
+    description: "get a kit"
+  nightfall.command.enchantmentlist:
+    default: true
+    description: "celist"
+  nightfall.command.convertcrate:
+    default: op
+    description: "convertcrate"
+  nightfall.command.crates:
+    default: true
+    description: "crates"
+  nightfall.command.crateitems:
+    default: true
+    description: "crateitems"
+  nightfall.command.setdonatorrank:
+    default: op
+    description: "setdonatorrank"
+  nightfall.command.vote:
+    default: true
+    description: "vote"
+  nightfall.command.trash:
+    default: true
+    description: "trash"
+  nightfall.command.keyall:
+    default: op
+    description: "keyall"
+  nightfall.command.renameitem:
+    default: op
+    description: "renameitem"
+  nightfall.command.disenchant:
+    default: true
+    description: "disenchant"
+  nightfall.command.news:
+    default: true
+    description: "news"
+  nightfall.command.eval:
+    default: false
+    description: "eval"
+  nightfall.command.ignoreall:
+    default: op
+    description: "ignoreall"
+  nightfall.command.banlist:
+    default: op
+    description: "banlist"
+  nightfall.command.setblock:
+    default: op
+    description: "setblock"
+  nightfall.command.rules:
+    default: true
+    description: "rules"
+  nightfall.command.spectator:
+    default: op
+    description: "spectator"
+  nightfall.command.survival:
+    default: op
+    description: "survival"
+  nightfall.command.clearlag:
+    default: op
+    description: "clearlag"
+  nightfall.command.reforge:
+    default: true
+    description: "reforge"
+  nightfall.command.broadcast:
+    default: op
+    description: "broadcast"
+  nightfall.command.key:
+    default: op
+    description: "key"
+  nightfall.command.softrestart:
+    default: op
+    description: "softrestart"
+  nightfall.command.lottery:
+    default: true
+    description: "lottery"
+  nightfall.command.note:
+    default: op
+    description: "note"
+  nightfall.command.warn:
+    default: op
+    description: ""
+  nightfall.command.warnings:
+    default: op
+    description: ""
+  nightfall.command.mywarns:
+    default: true
+    description: ""
+  nightfall.command.clearwarn:
+    default: op
+    description: ""
+  nightfall.command.vanish:
+    default: op
+    description: ""
+  nightfall.command.superlist:
+    default: op
+    description: ""
+  nightfall.command.near:
+    default: op
+    description: ""
