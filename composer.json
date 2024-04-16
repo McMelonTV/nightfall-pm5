@@ -1,0 +1,20 @@
+{
+    "name": "mcmelon/nightfall-pm5",
+    "description": "This is a port of the NightFall source code to PocketMine-MP API version 5",
+	"version": "1.0.0",
+    "require": {
+        "phpstan/phpstan": "^1.10",
+        "pocketmine/pocketmine-mp": "^5.14"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mcmelon\\NightfallPm5\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "McMelonTV",
+            "email": "mcmelontube@gmail.com"
+        }
+    ]
+}
