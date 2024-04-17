@@ -18,12 +18,10 @@ use AndreasHGK\Core\ItemInterface;
 use AndreasHGK\Core\manager\GlobalPrices;
 use AndreasHGK\Core\mine\MineManager;
 use AndreasHGK\Core\user\UserManager;
-use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\item\ItemIds;
 use pocketmine\item\VanillaItems;
 use pocketmine\world\sound\ItemBreakSound;
 use pocketmine\world\sound\XpCollectSound;
@@ -66,9 +64,9 @@ class BlockBreakListener implements Listener {
             $interface = ItemInterface::fromItem($ev->getItem());
             $obBreaker = $this->customEnchantManager->get(CustomEnchantIds::OBSIDIAN_BREAKER);
             $block = $ev->getBlock();
-            if($interface->hasEnchantment($obBreaker) && $block->getId() === BlockLegacyIds::OBSIDIAN){
+            if($interface->hasEnchantment($obBreaker) && $block->getTypeId() === VanillaBlocks::OBSIDIAN()->getTypeId()){
                 if(mt_rand(0, 100) < 5 * $obBreaker->getLevel()){
-                    $ev->getPlayer()->breakBlock($block->getPos());
+                    $ev->getPlayer()->breakBlock($block->getPosition());
                     $ev->cancel();
                 }
             }
@@ -94,7 +92,7 @@ class BlockBreakListener implements Listener {
         $user = $this->userManager->getOnline($player);
 
         $originalBlock = $ev->getBlock();
-        $originalPos = $originalBlock->getPos();
+        $originalPos = $originalBlock->getPosition();
 
         $world = $player->getWorld();
 
@@ -147,7 +145,7 @@ class BlockBreakListener implements Listener {
         $xp = 0;
         $xpmanager = $player->getXpManager();
         foreach($blocks as $block){
-            $pos = $block->getPos();
+            $pos = $block->getPosition();
             if(!$user->canDestroyAt($pos)) {
                 continue;
             }
@@ -169,41 +167,41 @@ class BlockBreakListener implements Listener {
             $newDrop = $drop;
 
             if($mineEvent->getFusion()){
-                switch ($newDrop->getId()){
-                    case ItemIds::COAL:
+                switch ($newDrop->getTypeId()){
+                    case VanillaItems::COAL()->getTypeId():
                         $newDrop = VanillaItems::IRON_INGOT();
                         break;
-                    case ItemIds::IRON_INGOT:
+                    case VanillaItems::IRON_INGOT()->getTypeId():
                         $newDrop = VanillaItems::GOLD_INGOT();
                         break;
-                    case ItemIds::GOLD_INGOT:
+                    case VanillaItems::GOLD_INGOT()->getTypeId():
                         $newDrop = VanillaItems::REDSTONE_DUST();
                         break;
-                    case ItemIds::REDSTONE_DUST:
+                    case VanillaItems::REDSTONE_DUST()->getTypeId():
                         $newDrop = VanillaItems::LAPIS_LAZULI();
                         break;
-                    case ItemIds::DYE:
+                    case VanillaItems::DYE()->getTypeId():
                         $newDrop = VanillaItems::DIAMOND();
                         break;
-                    case ItemIds::DIAMOND:
+                    case VanillaItems::DIAMOND()->getTypeId():
                         $newDrop = VanillaItems::EMERALD();
                         break;
-                    case ItemIds::COAL_BLOCK:
+                    case VanillaBlocks::COAL_BLOCK()->getTypeId():
                         $newDrop = VanillaBlocks::IRON()->asItem();
                         break;
-                    case ItemIds::IRON_BLOCK:
+                    case VanillaBlocks::IRON()->getTypeId():
                         $newDrop = VanillaBlocks::GOLD()->asItem();
                         break;
-                    case ItemIds::GOLD_BLOCK:
+                    case VanillaBlocks::GOLD()->getTypeId():
                         $newDrop = VanillaBlocks::REDSTONE()->asItem();
                         break;
-                    case ItemIds::REDSTONE_BLOCK:
+                    case VanillaBlocks::REDSTONE()->getTypeId():
                         $newDrop = VanillaBlocks::LAPIS_LAZULI()->asItem();
                         break;
-                    case ItemIds::LAPIS_BLOCK:
+                    case VanillaBlocks::LAPIS_LAZULI()->getTypeId():
                         $newDrop = VanillaBlocks::DIAMOND()->asItem();
                         break;
-                    case ItemIds::DIAMOND_BLOCK:
+                    case VanillaBlocks::DIAMOND()->getTypeId():
                         $newDrop = VanillaBlocks::EMERALD()->asItem();
                         break;
                 }
@@ -221,8 +219,10 @@ class BlockBreakListener implements Listener {
 
             $user->addMinedBlock();
 
-            $id = (string)$drop->getId();
-            $meta = (string)$drop->getMeta();
+            $id = (string)$drop->getTypeId();
+			//fuck this
+            // $meta = (string)$drop->getMeta();
+			$meta = 0;
             $count = $drop->getCount();
             if(isset($prices[$id.":".$meta])){
                 $price = $prices[$id.":".$meta]*$count;

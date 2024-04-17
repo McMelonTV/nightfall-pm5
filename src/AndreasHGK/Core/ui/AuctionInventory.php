@@ -10,8 +10,9 @@ use AndreasHGK\Core\utils\IntUtils;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\block\utils\DyeColor;
+use pocketmine\block\VanillaBlocks;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use pocketmine\world\sound\ClickSound;
 
@@ -152,7 +153,6 @@ class AuctionInventory {
     }
 
     public static function update(User $user) : void {
-        $if = ItemFactory::getInstance();
         $menu = $user->getAucInv();
         $menu->getInventory()->clearAll();
         $int = 0;
@@ -216,46 +216,46 @@ class AuctionInventory {
         }
 
         for($i = 45; $i < 54; ++$i){
-            $item = $if->get(ItemIds::STAINED_GLASS_PANE, 14, 1);
+            $item = VanillaBlocks::STAINED_GLASS_PANE()->setColor(DyeColor::RED)->asItem();
             $item->setCustomName("§r§c/");
             $menu->getInventory()->setItem($i, $item);
         }
 
-        $item = $if->get(ItemIds::PAPER, 14, 1);
+        $item = VanillaItems::PAPER();
         $item->setCustomName("§r§7You can sell items\n§r§7here with:\n§r§b/ah sell");
         $menu->getInventory()->setItem(53, $item);
 
         if($user->getViewingExpiredAuc() || $user->getViewingOwnItems()){
-            $back = $if->get(ItemIds::BARRIER, 0, 1);
+            $back = VanillaBlocks::BARRIER()->asItem();
             $back->setNamedTag($back->getNamedTag()->setString("auctionMenuItem", "back"));
             $back->setCustomName("§r§bGo back");
             $menu->getInventory()->setItem(53, $back);
         }
 
         if((!$user->getViewingOwnItems() && !$user->getViewingExpiredAuc()) && !empty($user->getExpiredAuctionItems())){
-            $expired = $if->get(ItemIds::CHEST, 0, 1);
+            $expired = VanillaBlocks::CHEST()->asItem();
             $expired->setNamedTag($expired->getNamedTag()->setString("auctionMenuItem", "expired"));
             $expired->setCustomName("§r§bView expired items");
             $menu->getInventory()->setItem(46, $expired);
         }
         if((!$user->getViewingOwnItems() && !$user->getViewingExpiredAuc()) && !empty(AuctionManager::getInstance()->getAllSellerItems($user->getPlayer()->getName()))){
-            $expired = $if->get(ItemIds::CHEST, 0, 1);
+            $expired = VanillaBlocks::CHEST()->asItem();
             $expired->setNamedTag($expired->getNamedTag()->setString("auctionMenuItem", "owned"));
             $expired->setCustomName("§r§bView owned items");
             $menu->getInventory()->setItem(45, $expired);
         }
 
-        $next = $if->get($user->getAucPage() < $maxPages ? ItemIds::PAPER : ItemIds::BARRIER, 0, 1);
+        $next = $user->getAucPage() < $maxPages ? VanillaItems::PAPER() : VanillaBlocks::BARRIER()->asItem();
         $next->setNamedTag($next->getNamedTag()->setString("auctionMenuItem", $user->getAucPage() < $maxPages ? "next" : "disabled"));
         $next->setCustomName($user->getAucPage() < $maxPages ? "§r§bNext page" : "§r§c/");
         $menu->getInventory()->setItem(50, $next);
 
-        $previous = $if->get($user->getAucPage() > 1 ? ItemIds::PAPER : ItemIds::BARRIER, 0, 1);
+        $previous = $user->getAucPage() > 1 ? VanillaItems::PAPER() : VanillaBlocks::BARRIER()->asItem();
         $previous->setNamedTag($previous->getNamedTag()->setString("auctionMenuItem", $user->getAucPage() > 1 ? "previous" : "disabled"));
         $previous->setCustomName($user->getAucPage() > 1 ? "§r§bPrevious page" : "§r§c/");
         $menu->getInventory()->setItem(48, $previous);
 
-        $chest = $if->get(ItemIds::CHEST, 0, 1);
+        $chest = VanillaBlocks::CHEST()->asItem();
         $chest->setNamedTag($chest->getNamedTag()->setString("auctionMenuItem", "pageCounter"));
         $chest->setCustomName("§r§bpage ".$user->getAucPage()."§8/§b".(AuctionManager::getInstance()->countPages() > 0 ? AuctionManager::getInstance()->countPages() : 1));
         $menu->getInventory()->setItem(49, $chest);

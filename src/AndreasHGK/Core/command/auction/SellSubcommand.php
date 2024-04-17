@@ -11,7 +11,7 @@ use AndreasHGK\Core\ui\AuctionSellForm;
 use AndreasHGK\Core\user\UserManager;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 
 class SellSubcommand extends Subcommand{
@@ -34,7 +34,7 @@ class SellSubcommand extends Subcommand{
         }
 
         $item = $sender->getInventory()->getItemInHand();
-        if($item->getId() === ItemIds::AIR){
+        if($item->getTypeId() === VanillaItems::AIR()){
             $sender->sendMessage("§r§c§l>§r§7 You can't sell air.");
             return true;
         }

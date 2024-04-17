@@ -21,9 +21,10 @@ use AndreasHGK\Core\utils\MineUtils;
 use AndreasHGK\Core\utils\TagUtils;
 use AndreasHGK\Core\warning\Warning;
 use muqsit\invmenu\InvMenu;
+use pocketmine\block\BlockTypeIds;
 use pocketmine\item\Item;
-use pocketmine\item\ItemIds;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+use pocketmine\network\mcpe\protocol\types\LevelSoundEvent;
 use pocketmine\permission\PermissionAttachment;
 use pocketmine\player\IPlayer;
 use pocketmine\player\OfflinePlayer;
@@ -220,7 +221,7 @@ class User extends OfflineUser {
 
         $this->setMineRank($rankTo);
         $this->getPlayer()->sendMessage("§b§l> §r§7You have been ranked up to §b".TextFormat::colorize($rankTo->getTag()).'§r§7 for §bfree§r§7!');
-        $pk = LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_LEVELUP, $this->getPlayer()->getPosition(), 0x10000000 * intdiv(30, 5));
+        $pk = LevelSoundEventPacket::create(LevelSoundEvent::LEVELUP, $this->getPlayer()->getPosition(), 0x10000000 * intdiv(30, 5), "", false, false);
         $this->getPlayer()->getNetworkSession()->sendDataPacket($pk);
         return true;
     }
@@ -411,7 +412,7 @@ class User extends OfflineUser {
         $reward = MineUtils::getPrestigeReward($prestigeTo);
         $this->setPrestigePoints($this->getPrestigePoints()+$reward);
         $this->getPlayer()->sendMessage("§b§l> §r§7You have been ranked up to prestige§b ".IntUtils::toRomanNumerals($prestigeTo)."§r§7 for §b$".IntUtils::shortNumberRounded($price)."§r§7 and have received §b".$reward."§opp§r§7!");
-        $pk = LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_LEVELUP, $this->getPlayer()->getPosition(), 0x10000000 * intdiv(30, 5));
+		$pk = LevelSoundEventPacket::create(LevelSoundEvent::LEVELUP, $this->getPlayer()->getPosition(), 0x10000000 * intdiv(30, 5), "", false, false);
         $this->getPlayer()->getNetworkSession()->sendDataPacket($pk);
     }
 
@@ -432,7 +433,7 @@ class User extends OfflineUser {
         $this->takeMoney($price);
         $this->setMineRank($rankTo);
         $this->getPlayer()->sendMessage("§b§l> §r§7You have been ranked up to §b".TextFormat::colorize($rankTo->getTag())."§r§7 for §b$".IntUtils::shortNumberRounded($price)."§r§7!");
-        $pk = LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_LEVELUP, $this->getPlayer()->getPosition(), 0x10000000 * intdiv(30, 5));
+		$pk = LevelSoundEventPacket::create(LevelSoundEvent::LEVELUP, $this->getPlayer()->getPosition(), 0x10000000 * intdiv(30, 5), "", false, false);
         $this->getPlayer()->getNetworkSession()->sendDataPacket($pk);
         return true;
     }
@@ -450,24 +451,34 @@ class User extends OfflineUser {
         }
 
         switch ($id){
-            case ItemIds::CHEST:
-            case ItemIds::OAK_DOOR:
-            case ItemIds::BIRCH_DOOR:
-            case ItemIds::SPRUCE_DOOR:
-            case ItemIds::DARK_OAK_DOOR:
-            case ItemIds::ACACIA_DOOR:
-            case ItemIds::IRON_DOOR:
-            case ItemIds::JUNGLE_DOOR:
-            case ItemIds::TRAPDOOR:
-            case ItemIds::SPRUCE_TRAPDOOR:
-            case ItemIds::JUNGLE_TRAPDOOR:
-            case ItemIds::DARK_OAK_TRAPDOOR:
-            case ItemIds::BIRCH_TRAPDOOR:
-            case ItemIds::IRON_TRAPDOOR:
-            case ItemIds::FURNACE:
-            case ItemIds::BLAST_FURNACE:
-            case ItemIds::SMOKER:
-            case ItemIds::TRAPPED_CHEST:
+			// should definitely update this to new blocks
+            case BlockTypeIds::CHEST:
+			case BlockTypeIds::TRAPPED_CHEST:
+			case BlockTypeIds::OAK_DOOR:
+			case BlockTypeIds::SPRUCE_DOOR:
+			case BlockTypeIds::DARK_OAK_DOOR:
+			case BlockTypeIds::BIRCH_DOOR:
+			case BlockTypeIds::ACACIA_DOOR:
+			case BlockTypeIds::JUNGLE_DOOR:
+			case BlockTypeIds::MANGROVE_DOOR:
+			case BlockTypeIds::CHERRY_DOOR:
+			case BlockTypeIds::WARPED_DOOR:
+			case BlockTypeIds::CRIMSON_DOOR:
+			case BlockTypeIds::IRON_DOOR:
+            case BlockTypeIds::OAK_TRAPDOOR:
+            case BlockTypeIds::SPRUCE_TRAPDOOR:
+			case BlockTypeIds::DARK_OAK_TRAPDOOR:
+			case BlockTypeIds::BIRCH_TRAPDOOR:
+			case BlockTypeIds::ACACIA_TRAPDOOR:
+			case BlockTypeIds::JUNGLE_TRAPDOOR:
+			case BlockTypeIds::MANGROVE_TRAPDOOR:
+			case BlockTypeIds::CHERRY_TRAPDOOR:
+			case BlockTypeIds::WARPED_TRAPDOOR:
+			case BlockTypeIds::CRIMSON_TRAPDOOR:
+            case BlockTypeIds::IRON_TRAPDOOR:
+            case BlockTypeIds::FURNACE:
+            case BlockTypeIds::BLAST_FURNACE:
+            case BlockTypeIds::SMOKER:
                 if($pos->getWorld()->getDisplayName() !== PlotManager::$plotworld) {
                     return true;
                 }

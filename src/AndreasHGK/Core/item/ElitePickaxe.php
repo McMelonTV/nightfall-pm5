@@ -9,8 +9,7 @@ use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class ElitePickaxe extends TieredItem implements Durable, Repairable {
 
@@ -54,7 +53,7 @@ class ElitePickaxe extends TieredItem implements Durable, Repairable {
     }
 
     public function getBasicItem() : Item {
-        $item = ItemFactory::getInstance()->get(ItemIds::GOLD_PICKAXE, 0, 1);
+        $item = VanillaItems::GOLDEN_PICKAXE();
         $item->setCustomName("§r§9Elite Pickaxe");
         EnchantmentUtils::applyGlow($item);
         ItemUtils::description($item, "§r§7This pickaxe mines faster than any other!");

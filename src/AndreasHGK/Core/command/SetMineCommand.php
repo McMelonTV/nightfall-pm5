@@ -47,7 +47,8 @@ class SetMineCommand extends Executor{
         $user->setMineRank($mineRank);
         $permManager = PermissionManager::getInstance();
         foreach(UserManager::getInstance()->get($player)->getMineRank()->getPerms() as $perm){
-            $permManager->subscribeToPermission($perm, $player);
+			// todo
+            // $permManager->subscribeToPermission($perm, $player);
         }
 
         $sender->sendMessage("§b§l> §r§7Set §b".$player->getName()."§7's mine to §b".$mineRank->getName()."§7.");

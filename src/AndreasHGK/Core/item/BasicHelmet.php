@@ -9,8 +9,7 @@ use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class BasicHelmet extends TieredItem implements Durable, Repairable {
 
@@ -63,7 +62,7 @@ class BasicHelmet extends TieredItem implements Durable, Repairable {
     }
 
     public function getBasicItem() : Item {
-        $item = ItemFactory::getInstance()->get(ItemIds::IRON_HELMET, 0, 1);
+        $item = VanillaItems::IRON_HELMET();
         $item->setCustomName("§r§bBasic Helmet");
         EnchantmentUtils::applyGlow($item);
         ItemUtils::description($item, "§r§7A basic helmet, crafted using steeldust.");

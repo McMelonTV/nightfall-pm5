@@ -23,7 +23,7 @@ class PlotsCommand extends Executor{
             return false;
         }
 
-        $sender->teleport(new Location(0.5, 65, 0.5, 0, 0, PlotManager::getInstance()->getWorld()));
+        $sender->teleport(new Location(0.5, 65, 0.5, PlotManager::getInstance()->getWorld(), 0, 0));
         $sender->sendMessage("§r§b§l> §r§7You have been teleported to the plots.");
         return true;
     }

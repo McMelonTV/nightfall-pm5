@@ -48,10 +48,12 @@ class PVPWorldManager {
     }
 
     public function loadAll() : void {
-        $zones = DataManager::getKey(FileUtils::MakeYAML("pvpworlds"),  "pvpworlds", []);
-        foreach($zones as $id => $zone){
-            $this->load($id);
-        }
+        $zones = DataManager::getKey(FileUtils::MakeYAML("pvpworlds"),  "pvpworlds", false);
+		if (is_array($zones)) {
+			foreach($zones as $id => $zone){
+				$this->load($id);
+			}
+		}
     }
 
     public function load(string $zoneId) : ?string {
@@ -63,7 +65,8 @@ class PVPWorldManager {
         $world = $worldManager->getWorldByName($zoneData["world"]);
         $zone = new PVPZone($id, $world, new Vector3($zoneData["x1"], $zoneData["y1"], $zoneData["z1"]), new Vector3($zoneData["x2"], $zoneData["y2"], $zoneData["z2"]));
         $this->pvpWorlds[$id] = $zone;
-        return $zone;
+		//unsure if this is what is supposed to be returned but idc
+        return $zone->getId();
     }
 
     public function exist(string $tag) : bool {

@@ -6,13 +6,12 @@ namespace AndreasHGK\Core\item;
 
 use AndreasHGK\Core\ItemInterface;
 use AndreasHGK\Core\utils\EnchantmentUtils;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class TestPickaxe extends CustomItem {
 
     public function __construct(){
-        $item = ItemFactory::getInstance()->get(ItemIds::DIAMOND_PICKAXE, 0, 1);
+        $item = VanillaItems::DIAMOND_PICKAXE();
         $item->setCustomName("§r§4Test Pickaxe");
         EnchantmentUtils::applyGlow($item);
 

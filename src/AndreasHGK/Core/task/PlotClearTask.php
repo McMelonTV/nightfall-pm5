@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AndreasHGK\Core\task;
 
 use AndreasHGK\Core\plot\PlotManager;
-use pocketmine\block\BlockLegacyIds;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 use pocketmine\world\format\io\FastChunkSerializer;
@@ -39,17 +39,17 @@ class PlotClearTask extends AsyncTask {
     public function onRun() : void{
         $newChunks = [];
 
-        $air = $this->getFullId(BlockLegacyIds::AIR);
-        $bedrock = $this->getFullId(BlockLegacyIds::BEDROCK);
-        $grass = $this->getFullId(BlockLegacyIds::GRASS);
-        $dirt = $this->getFullId(BlockLegacyIds::DIRT);
+		$air = VanillaBlocks::AIR()->getStateId();
+		$bedrock = VanillaBlocks::BEDROCK()->getStateId();
+		$grass = VanillaBlocks::GRASS_BLOCK()->getStateId();
+		$dirt = VanillaBlocks::DIRT()->getStateId();
 
         $completedBlocks = 0;
         foreach(unserialize($this->chunks) as $key => $chunkHash){
             World::getXZ($key, $chunkX, $chunkZ);
             $chunkX <<= 4;
             $chunkZ <<= 4;
-            $chunk = FastChunkSerializer::deserialize($chunkHash);
+            $chunk = FastChunkSerializer::deserializeTerrain($chunkHash);
             for($x = 0; $x < 16; ++$x){
                 for($z = 0; $z < 16; ++$z){
                     if(!$this->isInPlot($x + $chunkX, 64, $z + $chunkZ)) {
@@ -59,16 +59,16 @@ class PlotClearTask extends AsyncTask {
                     for($y = 0; $y < 256; ++$y){
                         switch(true){
                             case $y === 0:
-                                $chunk->setFullBlock($x, $y, $z, $bedrock);
+                                $chunk->setBlockStateId($x, $y, $z, $bedrock);
                                 break;
                             case $y > 64:
-                                $chunk->setFullBlock($x, $y, $z, $air);
+                                $chunk->setBlockStateId($x, $y, $z, $air);
                                 break;
                             case $y < 64:
-                                $chunk->setFullBlock($x, $y, $z, $dirt);
+                                $chunk->setBlockStateId($x, $y, $z, $dirt);
                                 break;
                             case $y === 64:
-                                $chunk->setFullBlock($x, $y, $z, $grass);
+                                $chunk->setBlockStateId($x, $y, $z, $grass);
                                 break;
                         }
 
@@ -77,7 +77,7 @@ class PlotClearTask extends AsyncTask {
                 }
             }
 
-            $newChunks[$key] = FastChunkSerializer::serialize($chunk, false);
+            $newChunks[$key] = FastChunkSerializer::serializeTerrain($chunk);
         }
 
         $this->setResult($newChunks);
@@ -92,7 +92,7 @@ class PlotClearTask extends AsyncTask {
 
         foreach($chunks as $key => $chunk){
             World::getXZ($key, $chunkX, $chunkZ);
-            $world->setChunk($chunkX, $chunkZ, FastChunkSerializer::deserialize($chunk), true);
+            $world->setChunk($chunkX, $chunkZ, FastChunkSerializer::deserializeTerrain($chunk));
         }
 
         PlotManager::getInstance()->getById($this->id)->setClearing(false);

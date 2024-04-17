@@ -7,7 +7,7 @@ namespace AndreasHGK\Core\ui;
 use AndreasHGK\Core\auctionhouse\AuctionItem;
 use AndreasHGK\Core\auctionhouse\AuctionManager;
 use jojoe77777\FormAPI\CustomForm;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 
 class AuctionSellForm {
@@ -53,7 +53,7 @@ class AuctionSellForm {
             }
 
             $item = $player->getInventory()->getItemInHand();
-            if($item->getId() === ItemIds::AIR){
+            if($item->getTypeId() === VanillaItems::AIR()->getTypeId()){
                 $player->sendMessage("§r§c§l>§r§7 You can't sell air.");
                 return;
             }

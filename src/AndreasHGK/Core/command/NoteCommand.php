@@ -7,6 +7,7 @@ namespace AndreasHGK\Core\command;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+use pocketmine\network\mcpe\protocol\types\LevelSoundEvent;
 use pocketmine\player\Player;
 
 class NoteCommand extends Executor{
@@ -21,7 +22,7 @@ class NoteCommand extends Executor{
         if(!$sender instanceof  Player) return false;
 
         try{
-            $sound = LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_NOTE, $sender->getPosition(), ((int)$args[0] << 8) | (int)$args[1]);
+            $sound = LevelSoundEventPacket::create(LevelSoundEvent::NOTE, $sender->getPosition(), ((int)$args[0] << 8) | (int)$args[1], "", false, false);
 
             $sender->getNetworkSession()->sendDataPacket($sound);
 

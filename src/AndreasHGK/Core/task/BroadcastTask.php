@@ -59,7 +59,7 @@ class BroadcastTask extends Task {
     public function broadcast() : void {
         $this->time = 0;
         $this->messages = 0;
-        $array = DataManager::getKey(DataManager::BROADCAST, "broadcasts", []);
+        $array = DataManager::getKey(DataManager::BROADCAST, "broadcasts", false);
         Server::getInstance()->broadcastMessage($array[array_rand($array)], Server::getInstance()->getOnlinePlayers());
     }
 

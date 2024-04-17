@@ -98,9 +98,10 @@ class Mine {
     public function getTotalBlocks() : int {
         $pos1 = $this->minPos;
         $pos2 = $this->maxPos;
-        return (abs($pos1->x - $pos2->x)+1)
+        $float = (abs($pos1->x - $pos2->x)+1)
             * (abs($pos1->y - $pos2->y)+1)
             * (abs($pos1->z - $pos2->z)+1);
+		return (int) $float;
     }
 
     public function isInMine($x, $y, $z, World $world = null) : bool{
@@ -178,7 +179,7 @@ class Mine {
         $zMax = $pos2->getZ();
         for($x = $xMin; $x - 16 <= $xMax; $x += 16){
             for($z = $zMin; $z - 16 <= $zMax; $z += 16){
-                $chunks[World::chunkHash(($x >> 4), ($z >> 4))] = FastChunkSerializer::serialize($this->world->loadChunk($x >> 4, $z >> 4), false);
+                $chunks[World::chunkHash(($x >> 4), ($z >> 4))] = FastChunkSerializer::serializeTerrain($this->world->loadChunk($x >> 4, $z >> 4));
             }
         }
 
@@ -199,7 +200,7 @@ class Mine {
             $zMin = min($pos1->getZ(), $pos2->getZ());
             $zMax = max($pos1->getZ(), $pos2->getZ());
             for(; $zMin - 16 <= $zMax; $zMin += 16){
-                $chunks[($xMin >> 4).":".($zMin >> 4)] = FastChunkSerializer::serialize($this->world->getChunk($xMin >> 4, $zMin >> 4), false);
+                $chunks[($xMin >> 4).":".($zMin >> 4)] = FastChunkSerializer::serializeTerrain($this->world->getChunk($xMin >> 4, $zMin >> 4));
             }
         }
 

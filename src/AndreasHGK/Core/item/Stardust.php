@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace AndreasHGK\Core\item;
 
 use AndreasHGK\Core\utils\EnchantmentUtils;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class Stardust extends CustomItem implements RepairResource {
 
@@ -15,7 +14,7 @@ class Stardust extends CustomItem implements RepairResource {
     }
 
     public function __construct(){
-        $item = ItemFactory::getInstance()->get(ItemIds::GLOWSTONE_DUST, 0, 1);
+		$item = VanillaItems::GLOWSTONE_DUST();
         $item->setCustomName("§r§eStardust");
         EnchantmentUtils::applyGlow($item);
         $item->setNamedTag($item->getNamedTag()->setInt("customitem", self::STARDUST));

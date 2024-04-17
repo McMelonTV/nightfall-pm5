@@ -12,11 +12,10 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\Server;
-use ReflectionProperty;
 
 final class PlayerManager{
 
-	private PlayerNetworkHandlerRegistry $network_handler_registry;
+	readonly public PlayerNetworkHandlerRegistry $network_handler_registry;
 
 	/** @var PlayerSession[] */
 	private array $sessions = [];
@@ -34,15 +33,9 @@ final class PlayerManager{
 	}
 
 	private function create(Player $player) : void{
-		static $_playerInfo = null;
-		if($_playerInfo === null){
-			$_playerInfo = new ReflectionProperty(Player::class, "playerInfo");
-			$_playerInfo->setAccessible(true);
-		}
-
 		$this->sessions[$player->getId()] = new PlayerSession($player, new PlayerNetwork(
 			$player->getNetworkSession(),
-			$this->network_handler_registry->get($_playerInfo->getValue($player)->getExtraData()["DeviceOS"] ?? -1)
+			$this->network_handler_registry->get($player->getPlayerInfo()->getExtraData()["DeviceOS"] ?? -1)
 		));
 	}
 
@@ -61,6 +54,10 @@ final class PlayerManager{
 		return $this->sessions[$player->getId()] ?? null;
 	}
 
+	/**
+	 * @deprecated Access {@see PlayerManager::$network_handler_registry} directly
+	 * @return PlayerNetworkHandlerRegistry
+	 */
 	public function getNetworkHandlerRegistry() : PlayerNetworkHandlerRegistry{
 		return $this->network_handler_registry;
 	}

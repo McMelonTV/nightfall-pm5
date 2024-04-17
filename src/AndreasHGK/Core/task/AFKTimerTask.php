@@ -34,7 +34,7 @@ class AFKTimerTask extends Task {
             }
 
             if($user->isAFK() and $user->getLastActivity() + 600 < $time){
-                $player->kick("§r§b§l>§r§7 You have been kicked for going AFK for too long.", false);
+                $player->kick("§r§b§l>§r§7 You have been kicked for going AFK for too long.");
             }
         }
     }

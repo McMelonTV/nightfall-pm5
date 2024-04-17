@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace AndreasHGK\Core\item;
 
 use AndreasHGK\Core\utils\EnchantmentUtils;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\block\utils\DyeColor;
+use pocketmine\item\VanillaItems;
 
 class ObsidianShard extends CustomItem implements RepairResource {
 
@@ -15,7 +15,7 @@ class ObsidianShard extends CustomItem implements RepairResource {
     }
 
     public function __construct(){
-        $item = ItemFactory::getInstance()->get(ItemIds::DYE, 16, 1);
+        $item = VanillaItems::DYE()->setColor(DyeColor::BLACK);
         $item->setCustomName("§r§0Obsidian Shard");
         EnchantmentUtils::applyGlow($item);
         $item->setNamedTag($item->getNamedTag()->setInt("customitem", self::OBSIDIANSHARD));

@@ -11,30 +11,30 @@ use muqsit\invmenu\inventory\InvMenuInventory;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\block\utils\DyeColor;
+use pocketmine\block\VanillaBlocks;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use pocketmine\world\sound\AnvilUseSound;
 
 class ForgeRepairInventory {
 
     public static function sendTo(Player $sender) : void {
-        $if = ItemFactory::getInstance();
         $menu = InvMenu::create(InvMenu::TYPE_HOPPER);
         $menu->setName("§8Item Forge");
-        $menu->setListener(static function (InvMenuTransaction $ts) use ($menu, $if){
+        $menu->setListener(static function (InvMenuTransaction $ts) use ($menu){
             $player = $ts->getPlayer();
             $itemClicked = $ts->getOut();
             $itemClickedWith = $ts->getIn();
             $action = $ts->getAction();
             $inv = $menu->getInventory();
 
-            if($itemClicked->getId() === 0 && $action->getSlot() === 4) {
+            if($itemClicked->getTypeId() === VanillaItems::AIR()->getTypeId() && $action->getSlot() === 4) {
                 return new InvMenuTransactionResult(true);
             }
 
             if($action->getSlot() === 4){
-                if($itemClickedWith->getId() !== ItemIds::AIR) {
+                if($itemClickedWith->getTypeId() !== VanillaItems::AIR()->getTypeId()) {
                     return new InvMenuTransactionResult(true);
                 }
 
@@ -43,7 +43,7 @@ class ForgeRepairInventory {
 
                 $customItem = $interface2->getCustomItem();
                 if(!$customItem || !$customItem instanceof RepairResource){
-                    $inv->setItem(4, ItemFactory::air());
+                    $inv->setItem(4, VanillaItems::AIR());
                     return new InvMenuTransactionResult(false);
                 }
 
@@ -51,9 +51,9 @@ class ForgeRepairInventory {
                 $repairMax = $interface1->getDamage();
                 $repairCount = (int)ceil($repairMax / $customItem->getRepairValue());
 
-                $inv->setItem(0, ItemFactory::air());
+                $inv->setItem(0, VanillaItems::AIR());
                 if($repairCount >= $inv->getItem(2)->getCount()){
-                    $inv->setItem(2, ItemFactory::air());
+                    $inv->setItem(2, VanillaItems::AIR());
                 }else{
                     $inv->setItem(2, $inv->getItem(2)->setCount($inv->getItem(2)->getCount() - $repairCount));
                 }
@@ -68,12 +68,12 @@ class ForgeRepairInventory {
                 return new InvMenuTransactionResult(true);
             }
 
-            $inv->setItem(4, ItemFactory::air());
+            $inv->setItem(4, VanillaItems::AIR());
 
             $item1 = clone $inv->getItem(0);
             $item2 = clone $inv->getItem(2);
 
-            if($itemClickedWith->getId() !== 0){
+            if($itemClickedWith->getTypeId() !== VanillaItems::AIR()->getTypeId()){
                 switch ($action->getSlot()){
                     case 0:
                         $item = $item1;
@@ -90,7 +90,7 @@ class ForgeRepairInventory {
                     $item->setCount($itemClickedWith->getCount());
                 }
 
-                if($item !== null && $item->getId() === 0){
+                if($item !== null && $item->getTypeId() === VanillaItems::AIR()->getTypeId()){
                     $item = $itemClickedWith;
                 }
 
@@ -107,25 +107,25 @@ class ForgeRepairInventory {
                 }
             }else{
                 if($action->getSlot() === 0 || $action->getSlot() === 2){
-                    $inv->setItem(4, ItemFactory::air());
+                    $inv->setItem(4, VanillaItems::AIR());
                     return new InvMenuTransactionResult(false); //one of the slots is empty
                 }
             }
 
-            if($item1->getId() === ItemIds::AIR || $item2->getId() === ItemIds::AIR) {
-                $inv->setItem(4, ItemFactory::air());
+            if($item1->getTypeId() === VanillaItems::AIR()->getTypeId() || $item2->getTypeId() === VanillaItems::AIR()->getTypeId()) {
+                $inv->setItem(4, VanillaItems::AIR());
                 return new InvMenuTransactionResult(false);
             }
 
             $interface1 = ItemInterface::fromItem($item1);
             $interface2 = ItemInterface::fromItem($item2);
             if(!$interface1->isCustomItem() || !$interface1->getCustomItem() instanceof Repairable){
-                $inv->setItem(4, ItemFactory::air());
+                $inv->setItem(4, VanillaItems::AIR());
                 return new InvMenuTransactionResult(false);
             }
 
             if(!$interface2->isCustomItem() || !$interface2->getCustomItem() instanceof RepairResource){
-                $inv->setItem(4, ItemFactory::air());
+                $inv->setItem(4, VanillaItems::AIR());
                 return new InvMenuTransactionResult(false);
             }
 
@@ -142,7 +142,7 @@ class ForgeRepairInventory {
         });
         $menu->setInventoryCloseListener(static function(Player $player, InvMenuInventory $inventory) use ($menu){
             foreach([0, 2] as $index){
-                if($inventory->getItem($index)->getId() !== ItemIds::AIR){
+                if($inventory->getItem($index)->getTypeId() !== VanillaItems::AIR()->getTypeId()){
                     $item = $inventory->getItem($index);
                     if($player->getInventory()->canAddItem($item)){
                         $player->getInventory()->addItem($item);
@@ -153,12 +153,12 @@ class ForgeRepairInventory {
             }
         });
 
-        $menuItem = $if->get(ItemIds::STAINED_GLASS, 14, 1);
+		$menuItem = VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED())->asItem();
         $menuItem->setCustomName("§r§c<-- Item 1\n§r§cItem 2 -->");
         $menuItem->setNamedTag($menuItem->getNamedTag()->setString("menuItem", "locked"));
         $menu->getInventory()->setItem(1, $menuItem);
 
-        $menuItem = $if->get(ItemIds::STAINED_GLASS, 14, 1);
+		$menuItem = VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED())->asItem();
         $menuItem->setCustomName("§r§c<-- Item 2\n§r§cOutput -->");
         $menuItem->setNamedTag($menuItem->getNamedTag()->setString("menuItem", "locked"));
         $menu->getInventory()->setItem(3, $menuItem);

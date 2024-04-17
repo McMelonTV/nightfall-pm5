@@ -22,7 +22,7 @@ class Holotext extends FallingBlock {
         $this->setCanSaveWithChunk(false);
         $this->setNameTag($title . ($text !== "" ? "\n" . $text : ""));
 
-        $this->setImmobile(true);
+        $this->setNoClientPredictions(true);
         $this->setHasGravity(false);
         $this->setNameTagAlwaysVisible(true);
     }

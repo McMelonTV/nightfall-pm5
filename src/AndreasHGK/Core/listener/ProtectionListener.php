@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace AndreasHGK\Core\listener;
 
 use AndreasHGK\Core\user\UserManager;
-use pocketmine\block\BlockLegacyIds;
+use pocketmine\block\BlockTypeIds;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityExplodeEvent;
-use pocketmine\event\entity\ExplosionPrimeEvent;
+use pocketmine\event\entity\EntityPreExplodeEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerBlockPickEvent;
 use pocketmine\event\player\PlayerBucketEmptyEvent;
@@ -27,7 +27,7 @@ class ProtectionListener implements Listener {
         $ev->cancel();
     }
 
-    public function onPrime(ExplosionPrimeEvent $ev) : void {
+    public function onPrime(EntityPreExplodeEvent $ev) : void {
         $ev->cancel();
     }
 
@@ -63,7 +63,7 @@ class ProtectionListener implements Listener {
     public function onBlockBreak(BlockBreakEvent $ev) : void {
         $player = $ev->getPlayer();
         $user = UserManager::getInstance()->getOnline($player);
-        if(!$user->canDestroyAt($ev->getBlock()->getPos())){
+        if(!$user->canDestroyAt($ev->getBlock()->getPosition())){
             $ev->cancel();
             $user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
         }
@@ -77,16 +77,24 @@ class ProtectionListener implements Listener {
     public function onBuild(BlockPlaceEvent $ev) : void {
         $player = $ev->getPlayer();
         $user = UserManager::getInstance()->getOnline($player);
-        if(!$user->canBuildAt($ev->getBlock()->getPos())){
-            $ev->cancel();
-            $user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
-        }
+        // if(!$user->canBuildAt($ev->getBlock()->getPosition())){
+        //     $ev->cancel();
+        //     $user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
+        // }
+		$blocks = iterator_to_array($ev->getTransaction()->getBlocks());
+		foreach($blocks as $block){
+			if(!$user->canBuildAt($block[3]->getPosition())){
+				$ev->cancel();
+				$user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
+				return;
+			}
+		}
     }
 
     public function onChest(PlayerInteractEvent $ev) : void {
         $player = $ev->getPlayer();
         $user = UserManager::getInstance()->getOnline($player);
-        if(!$user->canInteractAt($ev->getBlock()->getPos(), $ev->getBlock()->getId())){
+        if(!$user->canInteractAt($ev->getBlock()->getPosition(), $ev->getBlock()->getTypeId())){
             $ev->cancel();
             $user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't use that here!");
         }
@@ -95,7 +103,7 @@ class ProtectionListener implements Listener {
     public function onLiquidPlace(PlayerBucketEvent $ev) : void {
         $player = $ev->getPlayer();
         $user = UserManager::getInstance()->getOnline($player);
-        if(!$user->canBuildAt($ev->getBlockClicked()->getPos())){
+        if(!$user->canBuildAt($ev->getBlockClicked()->getPosition())){
             $ev->cancel();
             $user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
         }
@@ -104,7 +112,7 @@ class ProtectionListener implements Listener {
     public function onSignChange(SignChangeEvent $ev) : void {
         $player = $ev->getPlayer();
         $user = UserManager::getInstance()->getOnline($player);
-        if(!$user->canBuildAt($ev->getSign()->getPos())){
+        if(!$user->canBuildAt($ev->getSign()->getPosition())){
             $ev->cancel();
             $user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
         }
@@ -113,7 +121,7 @@ class ProtectionListener implements Listener {
     public function onBucketEmpty(PlayerBucketEmptyEvent $ev) : void {
         $player = $ev->getPlayer();
         $user = UserManager::getInstance()->getOnline($player);
-        if(!$user->canBuildAt($ev->getBlockClicked()->getPos())){
+        if(!$user->canBuildAt($ev->getBlockClicked()->getPosition())){
             $ev->cancel();
             $user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
         }
@@ -122,7 +130,7 @@ class ProtectionListener implements Listener {
     public function onBucketFill(PlayerBucketFillEvent $ev) : void {
         $player = $ev->getPlayer();
         $user = UserManager::getInstance()->getOnline($player);
-        if(!$user->canBuildAt($ev->getBlockClicked()->getPos())){
+        if(!$user->canBuildAt($ev->getBlockClicked()->getPosition())){
             $ev->cancel();
             $user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
         }
@@ -131,13 +139,13 @@ class ProtectionListener implements Listener {
     public function onInteract(PlayerInteractEvent $ev) : void {
         $player = $ev->getPlayer();
         $user = UserManager::getInstance()->getOnline($player);
-        if($ev->getAction() === PlayerInteractEvent::LEFT_CLICK_BLOCK && !$user->canDestroyAt($ev->getBlock()->getPos())){
+        if($ev->getAction() === PlayerInteractEvent::LEFT_CLICK_BLOCK && !$user->canDestroyAt($ev->getBlock()->getPosition())){
             $ev->cancel();
             //$user->sendTip("§r§8[§bNF§8]§r\n§r§7You can't build here!");
             return;
         }
 
-        if($ev->getBlock()->getId() !== BlockLegacyIds::CHEST && $ev->getAction() !== PlayerInteractEvent::LEFT_CLICK_BLOCK && !$user->canBuildAt($ev->getBlock()->getPos())){
+        if($ev->getBlock()->getTypeId() !== BlockTypeIds::CHEST && $ev->getAction() !== PlayerInteractEvent::LEFT_CLICK_BLOCK && !$user->canBuildAt($ev->getBlock()->getPosition())){
             $ev->cancel();
         }
     }

@@ -10,6 +10,7 @@ use AndreasHGK\Core\user\UserManager;
 use AndreasHGK\Core\utils\IntUtils;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
+use pocketmine\player\chat\ChatFormatter;
 use pocketmine\utils\TextFormat;
 
 class ChatListener implements Listener {
@@ -67,7 +68,15 @@ class ChatListener implements Listener {
         }
 
         $format .= $msg;
-        $format .= "§r⛏";
-        $ev->setFormat($format);
+        $format .= "§r";
+
+		$ev->setFormatter(new RawChatFormatter());
+        $ev->setMessage($format);
     }
+}
+
+class RawChatFormatter implements ChatFormatter {
+	public function format(string $username, string $message) : string {
+		return $message;
+	}
 }

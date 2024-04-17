@@ -5,8 +5,7 @@ api: 5.0.0
 php: 8.2
 load: POSTWORLD
 author: AndreasHGK
-description: NightFall Core Plugin
-depend: [RankSystem]
+description: NightFall Core Plugin - Ported to PM5 by mel (github.com/McMelonTV)
 
 permissions:
   nightfall:
@@ -91,7 +90,7 @@ permissions:
     description: "see someones stats"
   nightfall.command.feed:
     default: op
-    description: "feed someone"
+    description: "feed yourself"
   nightfall.command.feed.others:
     default: op
     description: "feed someone else"

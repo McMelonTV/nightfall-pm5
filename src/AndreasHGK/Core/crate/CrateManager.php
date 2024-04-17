@@ -9,8 +9,6 @@ use AndreasHGK\Core\item\CustomItemManager;
 use AndreasHGK\Core\item\EnchantmentBook;
 use AndreasHGK\Core\tag\TagManager;
 use AndreasHGK\Core\user\User;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
 use pocketmine\item\VanillaItems;
 use pocketmine\Server;
 use pocketmine\world\Position;
@@ -87,9 +85,9 @@ class CrateManager {
             new CrateItem(410, "3:5", "obsidian shard", 500, 0, 0, true),
             new CrateItem(420, "3:10", "obsidian shard", 200, 0, 0, true),
             new CrateItem(430, "3:15", "obsidian shard", 50, 0, 0, true),
-            new CrateItem(440, ItemFactory::getInstance()->get(ItemIds::NAMETAG), "random tag", 100, 0, 0, false, function(User $user) {
-                $user->grantRandomTag();
-            }, false),
+			new CrateItem(440, VanillaItems::NAME_TAG(), "random tag", 100, 0, 0, false, function(User $user) {
+				$user->grantRandomTag();
+			}, false),
             new CrateItem(450, "20:1:20", "Gold key", 50, 0, 0, true),
         ], 10000));
 
@@ -122,9 +120,9 @@ class CrateManager {
             new CrateItem(410, "3:15", "obsidian shard", 500, 0, 0, true),
             new CrateItem(420, "3:30", "obsidian shard", 200, 0, 0, true),
             new CrateItem(430, "3:45", "obsidian shard", 50, 0, 0, true),
-            new CrateItem(440, ItemFactory::getInstance()->get(ItemIds::NAMETAG), "random tag", 175, 0, 0, false, function(User $user) {
-                $user->grantRandomTag();
-            }, false),
+			new CrateItem(440, VanillaItems::NAME_TAG(), "random tag", 175, 0, 0, false, function(User $user) {
+				$user->grantRandomTag();
+			}, false),
             new CrateItem(450, "20:1:30", "Diamond key", 50, 0, 0, true),
         ], 750));
 
@@ -157,9 +155,9 @@ class CrateManager {
             new CrateItem(380, "2:45", "magicdust", 500, 0, 0, true),
             new CrateItem(390, "2:64", "magicdust", 200, 0, 0, true),
             new CrateItem(400, "2:80", "magicdust", 50, 0, 0, true),
-            new CrateItem(440, ItemFactory::getInstance()->get(ItemIds::NAMETAG), "random tag", 250, 0, 0, false, function(User $user) {
-                $user->grantRandomTag();
-            }, false),
+			new CrateItem(440, VanillaItems::NAME_TAG(), "random tag", 250, 0, 0, false, function(User $user) {
+				$user->grantRandomTag();
+			}, false),
             new CrateItem(450, "20:1:40", "Emerald key", 50, 0, 0, true),
         ], 50));
 
@@ -192,9 +190,9 @@ class CrateManager {
             new CrateItem(380, "2:85", "magicdust", 500, 0, 0, true),
             new CrateItem(390, "2:100", "magicdust", 200, 0, 0, true),
             new CrateItem(400, "2:120", "magicdust", 50, 0, 0, true),
-            new CrateItem(440, ItemFactory::getInstance()->get(ItemIds::NAMETAG), "random tag", 400, 0, 0, false, function(User $user) {
-                $user->grantRandomTag();
-            }, false),
+			new CrateItem(440, VanillaItems::NAME_TAG(), "random tag", 400, 0, 0, false, function(User $user) {
+				$user->grantRandomTag();
+			}, false),
             new CrateItem(450, "20:1:50", "Netherrite key", 50, 0, 0, true),
         ], 20));
 
@@ -219,34 +217,27 @@ class CrateManager {
             new CrateItem(241, VanillaItems::PAPER(), "$750K money drop", 500, 750000, 0, false),
             new CrateItem(250, "1:128", "stardust", 300, 0, 0, true),
             new CrateItem(260, "2:192", "magicdust", 400, 0, 0, true),
-            new CrateItem(270, ItemFactory::getInstance()->get(ItemIds::NAMETAG, 0, 10), "random tag", 300, 0, 0, false, function(User $user) {
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-            }, false),
+			new CrateItem(270, VanillaItems::NAME_TAG()->setCount(10), "random tag", 300, 0, 0, false, function(User $user) {
+				for ($i = 0; $i < 10; $i++) {
+					$user->grantRandomTag();
+				}
+			}, false),
             new CrateItem(280, VanillaItems::PAPER(), "10000 prestige points", 300, 0, 10000, false),
         ], 1));
 
         $this->register(new Crate(99, "Vote", [
-            new CrateItem(10, ItemFactory::getInstance()->get(ItemIds::NAMETAG), "random tag", 500, 0, 0, false, function(User $user) {
-                $user->grantRandomTag();
-            }, false),
-            new CrateItem(20, ItemFactory::getInstance()->get(ItemIds::NAMETAG, 0, 2), "random tag", 200, 0, 0, false, function(User $user) {
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-            }, false),
-            new CrateItem(30, ItemFactory::getInstance()->get(ItemIds::NAMETAG, 0, 3), "random tag", 50, 0, 0, false, function(User $user) {
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-                $user->grantRandomTag();
-            }, false),
+			new CrateItem(10, VanillaItems::NAME_TAG(), "random tag", 500, 0, 0, false, function(User $user) {
+				$user->grantRandomTag();
+			}, false),
+			new CrateItem(20, VanillaItems::NAME_TAG()->setCount(2), "random tag", 200, 0, 0, false, function(User $user) {
+				$user->grantRandomTag();
+				$user->grantRandomTag();
+			}, false),
+			new CrateItem(30, VanillaItems::NAME_TAG()->setCount(3), "random tag", 50, 0, 0, false, function(User $user) {
+				$user->grantRandomTag();
+				$user->grantRandomTag();
+				$user->grantRandomTag();
+			}, false),
             new CrateItem(40, VanillaItems::PAPER(), "200 prestige points", 500, 0, 200, false),
             new CrateItem(50, VanillaItems::PAPER(), "325 prestige points", 200, 0, 325, false),
             new CrateItem(60, VanillaItems::PAPER(), "500 prestige points", 50, 0, 500, false),
@@ -255,9 +246,9 @@ class CrateManager {
         ], 0));
 
         $this->register(new Crate(120, "KOTH", [
-            new CrateItem(10, ItemFactory::getInstance()->get(ItemIds::NAMETAG), "KOTH Tag", 350, 0, 0, false, function(User $user) {
-                $user->grantTag(TagManager::getInstance()->get("koth"));
-            }, false),
+			new CrateItem(10, VanillaItems::NAME_TAG(), "KOTH Tag", 350, 0, 0, false, function(User $user) {
+				$user->grantTag(TagManager::getInstance()->get("koth"));
+			}, false),
             new CrateItem(40, VanillaItems::BOOK(), "5 High End Enchant Forges", 300, 0, 0, false, function(User $user) {
                 $bookClass = CustomItemManager::getInstance()->get(CustomItem::ENCHANTMENTBOOK);
                 if(!$bookClass instanceof EnchantmentBook){

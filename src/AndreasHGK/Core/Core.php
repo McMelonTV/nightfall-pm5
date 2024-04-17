@@ -184,11 +184,20 @@ use AndreasHGK\Core\user\UserListener;
 use AndreasHGK\Core\user\UserManager;
 use AndreasHGK\Core\vault\VaultManager;
 use AndreasHGK\Core\vote\VoteParty;
+use AndreasHGK\RankSystem\command\AddrankCommand;
+use AndreasHGK\RankSystem\command\ListranksCommand;
+use AndreasHGK\RankSystem\command\PlayerranksCommand;
+use AndreasHGK\RankSystem\command\RankinfoCommand;
+use AndreasHGK\RankSystem\command\RemoverankCommand;
+use AndreasHGK\RankSystem\RankSystem;
+use AndreasHGK\RankSystem\task\RankExpireTask;
+use AndreasHGK\RankSystem\task\RankSystemTask;
 use muqsit\invmenu\InvMenuHandler;
 use pocketmine\block\BlockBreakInfo;
-use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockTypeInfo;
+use pocketmine\block\RuntimeBlockStateRegistry;
 use pocketmine\block\BlockIdentifier as BID;
-use pocketmine\block\BlockLegacyIds as Ids;
+use pocketmine\block\BlockTypeIds as Ids;
 use pocketmine\block\BlockToolType;
 use pocketmine\block\Opaque;
 use pocketmine\block\Redstone;
@@ -200,6 +209,7 @@ use pocketmine\item\enchantment\Rarity;
 use pocketmine\item\ToolTier;
 use pocketmine\math\Vector3;
 use pocketmine\plugin\PluginBase;
+use pocketmine\plugin\PluginManager;
 use pocketmine\Server;
 use pocketmine\utils\Internet;
 use pocketmine\world\generator\GeneratorManager;
@@ -268,15 +278,18 @@ final class Core extends PluginBase {
     }
 
     public function onLoad(): void {
-        DataManager::$dataFolder = $this->getDataFolder();
-        EnchantmentIdMap::getInstance()->register(self::GLOW_ID, new Enchantment(self::GLOW_ID, "", Rarity::COMMON, ItemFlags::ALL, ItemFlags::NONE, 1));
+		DataManager::$dataFolder = $this->getDataFolder();
+        EnchantmentIdMap::getInstance()->register(self::GLOW_ID, new Enchantment("", Rarity::COMMON, ItemFlags::ALL, ItemFlags::NONE, 1));
         self::$instance = $this;
         self::$devserver = DataManager::getKey(DataManager::CONFIG, "devserver");
         DataManager::loadDefault();
+
+		$this->saveResource("ranks.yml");
+
         AchievementManager::getInstance()->registerDefaults();
         CustomEnchantsManager::getInstance()->registerDefaults();
-        ShopCategoryManager::getInstance()->registerDefaults();
         CustomItemManager::getInstance()->registerDefaults();
+        ShopCategoryManager::getInstance()->registerDefaults();
         ForgeCategoryManager::getInstance()->registerDefaults();
 
         VoteParty::getInstance()->load();
@@ -293,13 +306,13 @@ final class Core extends PluginBase {
     }
 
     public function onEnable() : void{
-        BlockFactory::getInstance()->register(new Opaque(new BID(Ids::DIAMOND_BLOCK, 0), "Diamond Block", new BlockBreakInfo(4.25, BlockToolType::PICKAXE, ToolTier::IRON()->getHarvestLevel(), 30.0)), true);
-        BlockFactory::getInstance()->register(new Opaque(new BID(Ids::IRON_BLOCK, 0), "Iron Block", new BlockBreakInfo(3.5, BlockToolType::PICKAXE, ToolTier::STONE()->getHarvestLevel(), 30.0)), true);
-        BlockFactory::getInstance()->register(new Redstone(new BID(Ids::REDSTONE_BLOCK, 0), "Redstone Block", new BlockBreakInfo(3.0, BlockToolType::PICKAXE, ToolTier::WOOD()->getHarvestLevel(), 30.0)), true);
+        // RuntimeBlockStateRegistry::getInstance()->register(new Opaque(new BID(Ids::DIAMOND), "Diamond Block", new BlockTypeInfo(new BlockBreakInfo(4.25, BlockToolType::PICKAXE, ToolTier::IRON()->getHarvestLevel(), 30.0))));
+        // RuntimeBlockStateRegistry::getInstance()->register(new Opaque(new BID(Ids::IRON), "Iron Block", new BlockTypeInfo(new BlockBreakInfo(3.5, BlockToolType::PICKAXE, ToolTier::STONE()->getHarvestLevel(), 30.0))));
+        // RuntimeBlockStateRegistry::getInstance()->register(new Redstone(new BID(Ids::REDSTONE), "Redstone Block", new BlockTypeInfo(new BlockBreakInfo(3.0, BlockToolType::PICKAXE, ToolTier::WOOD()->getHarvestLevel(), 30.0))));
 
         AutoComplete::getInstance()->registerOwner($this);
 
-        GeneratorManager::getInstance()->addGenerator(PlotGenerator::class, "plot", true);
+        GeneratorManager::getInstance()->addGenerator(PlotGenerator::class, "plot", function() {}, true);
         $wm = $this->getServer()->getWorldManager();
         $wm->generateWorld(PlotManager::$plotworld, WorldCreationOptions::create()->setGeneratorClass(PlotGenerator::class));
         $wm->loadWorld(PlotManager::$plotworld);
@@ -375,6 +388,10 @@ final class Core extends PluginBase {
         foreach($tasks as $task){
             $this->getScheduler()->scheduleRepeatingTask($task, $task->getInterval());
         }
+		
+		// RankSystem
+		$rankExpireTask = new RankExpireTask();
+        $this->getScheduler()->scheduleDelayedRepeatingTask($rankExpireTask, $rankExpireTask->getDelay(), $rankExpireTask->getRepeat());
 
         $this->getScheduler()->scheduleDelayedRepeatingTask(new AutoMineRegenerateTask(), 100, 11);
 
@@ -434,7 +451,7 @@ final class Core extends PluginBase {
             new MeCommand(),
             new MuteCommand(),
             new SudoCommand(),
-            new ConvertWorldCommand(),
+            // new ConvertWorldCommand(),
             new IdCommand(),
             new RenameWorldCommand(),
             new MineCommand(),
@@ -507,6 +524,15 @@ final class Core extends PluginBase {
             new NearCommand(),
             new KothCommand(),
         ];
+
+		//RankSystem
+        $this->getServer()->getCommandMap()->registerAll("ranksystem", [
+            new ListranksCommand($this),
+            new RankinfoCommand($this),
+            new AddrankCommand($this),
+            new RemoverankCommand($this),
+            new PlayerranksCommand($this),
+        ]);
 
         if(self::isDevServer()){
             $commands[] = new EvalCommand();

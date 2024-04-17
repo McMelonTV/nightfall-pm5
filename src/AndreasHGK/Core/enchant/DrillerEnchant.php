@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace AndreasHGK\Core\enchant;
 
-use pocketmine\block\Block;
-use pocketmine\block\BlockFactory;
-use pocketmine\block\BlockLegacyIds;
 use pocketmine\item\enchantment\ItemFlags;
 use pocketmine\world\utils\SubChunkExplorer;
 use pocketmine\world\utils\SubChunkExplorerStatus;
 
 class DrillerEnchant extends CustomEnchant {
 
-    private const AIR_STATE = BlockLegacyIds::AIR << 4;
+    // private const AIR_STATE = BlockLegacyIds::AIR << 4;
 
     public function getCompatible() : array {
         return [self::GROUP_TOOLS];
@@ -54,10 +51,10 @@ class DrillerEnchant extends CustomEnchant {
             return;
         }
 
-        $blockFactory = BlockFactory::getInstance();
+        // $blockFactory = BlockFactory::getInstance();
         $array = [];
 
-        $pos = $block->getPos();
+        $pos = $block->getPosition();
         $world = $pos->getWorld();
 
         $subChunkHandler = new SubChunkExplorer($world);
@@ -75,13 +72,13 @@ class DrillerEnchant extends CustomEnchant {
                         continue;
                     }
 
-                    $state = $subChunkHandler->currentSubChunk->getFullBlock($x & 15, $y & 15, $z & 15);
-                    if($state !== static::AIR_STATE){
-                        /** @var Block $block */
-                        $block = $blockFactory->fromFullBlock($state);
-                        $block->position($world, $x, $y, $z);
-                        $array[] = $block;
-                    }
+                    $state = $subChunkHandler->currentSubChunk->getBlockStateId($x & 15, $y & 15, $z & 15);
+                    // if($state !== static::AIR_STATE){
+                    //     /** @var Block $block */
+                    //     $block = $blockFactory->fromFullBlock($state);
+                    //     $block->position($world, $x, $y, $z);
+                    //     $array[] = $block;
+                    // }
                 }
             }
         }

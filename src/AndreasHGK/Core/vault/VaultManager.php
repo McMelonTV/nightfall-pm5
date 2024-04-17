@@ -5,6 +5,7 @@ namespace AndreasHGK\Core\vault;
 use AndreasHGK\Core\manager\DataManager;
 use AndreasHGK\Core\user\OfflineUser;
 use AndreasHGK\Core\utils\FileUtils;
+use PresentKim\ItemSerialize\ItemSerializeUtils;
 use pocketmine\item\Item;
 
 class VaultManager {
@@ -39,7 +40,7 @@ class VaultManager {
         foreach($pages as $number => $page){
             $loadedPage = [];
             foreach($page as $key => $item){
-                $loadedPage[$key] = Item::jsonDeserialize($item);
+                $loadedPage[$key] = ItemSerializeUtils::jsonDeserialize($item);
             }
 
             $loadedPages[$number] = $loadedPage;
@@ -77,7 +78,7 @@ class VaultManager {
             $page = [];
             foreach($items as $key => $item){
                 /** @var $item Item */
-                $page[$key] = $item->jsonSerialize();
+                $page[$key] = ItemSerializeUtils::jsonSerialize($item);
             }
 
             $pages[$pageNumber] = $page;

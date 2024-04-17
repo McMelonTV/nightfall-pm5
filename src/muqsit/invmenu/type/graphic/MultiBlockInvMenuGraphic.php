@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace muqsit\invmenu\type\graphic;
 
-use InvalidStateException;
+use LogicException;
 use muqsit\invmenu\type\graphic\network\InvMenuGraphicNetworkTranslator;
 use pocketmine\inventory\Inventory;
 use pocketmine\math\Vector3;
@@ -12,20 +12,17 @@ use pocketmine\player\Player;
 
 final class MultiBlockInvMenuGraphic implements PositionedInvMenuGraphic{
 
-	/** @var PositionedInvMenuGraphic[] */
-	private array $graphics;
-
 	/**
 	 * @param PositionedInvMenuGraphic[] $graphics
 	 */
-	public function __construct(array $graphics){
-		$this->graphics = $graphics;
-	}
+	public function __construct(
+		readonly private array $graphics
+	){}
 
 	private function first() : PositionedInvMenuGraphic{
 		$first = current($this->graphics);
 		if($first === false){
-			throw new InvalidStateException("Tried sending inventory from a multi graphic consisting of zero entries");
+			throw new LogicException("Tried sending inventory from a multi graphic consisting of zero entries");
 		}
 
 		return $first;
@@ -53,5 +50,16 @@ final class MultiBlockInvMenuGraphic implements PositionedInvMenuGraphic{
 
 	public function getPosition() : Vector3{
 		return $this->first()->getPosition();
+	}
+
+	public function getAnimationDuration() : int{
+		$max = 0;
+		foreach($this->graphics as $graphic){
+			$duration = $graphic->getAnimationDuration();
+			if($duration > $max){
+				$max = $duration;
+			}
+		}
+		return $max;
 	}
 }

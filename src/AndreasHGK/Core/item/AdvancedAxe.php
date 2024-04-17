@@ -9,8 +9,7 @@ use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class AdvancedAxe extends TieredItem implements Durable, Repairable {
 
@@ -55,7 +54,7 @@ class AdvancedAxe extends TieredItem implements Durable, Repairable {
     }
 
     public function getBasicItem() : Item {
-        $item = ItemFactory::getInstance()->get(ItemIds::DIAMOND_AXE, 0, 1);
+        $item = VanillaItems::DIAMOND_AXE();
 
         $item->setCustomName("§r§cAdvanced Axe");
 

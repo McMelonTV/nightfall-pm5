@@ -10,9 +10,10 @@ use AndreasHGK\Core\Core;
 use AndreasHGK\Core\gang\GangManager;
 use AndreasHGK\Core\plot\PlotManager;
 use AndreasHGK\Core\rank\MineRankManager;
-use AndreasHGK\Core\rank\RankManager;
 use AndreasHGK\Core\user\UserManager;
 use AndreasHGK\Core\utils\FileUtils;
+use AndreasHGK\RankSystem\rank\RankManager;
+use AndreasHGK\RankSystem\RankSystem;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\nbt\NBT;
@@ -56,10 +57,10 @@ class SeasonresetCommand extends Executor{
             $user->getVault()->setPages([]);
             $user->setKitCooldowns([]);
 
-            if(!$user->getRank()->isStaff() && $user->getDonatorRank() !== null){
-                $user->setRank($user->getDonatorRank());
-            }elseif(!$user->getRank()->isStaff()){
-                $user->setRank(RankManager::getInstance()->get("member"));
+            if(!$user->getRank()->getRank()->isStaff() && $user->getRank()->getRank()->isDonator()){
+                $user->getRankComponent()->setRanks([$user->getRank()->getRank()]);
+            }elseif(!$user->getRank()->getRank()->isStaff()){
+                $user->getRankComponent()->setRanks([RankSystem::getInstance()->getRankManager()->get("member")]);
             }
 
             UserManager::getInstance()->save($user);

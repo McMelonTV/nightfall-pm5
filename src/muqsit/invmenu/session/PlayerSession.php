@@ -5,30 +5,28 @@ declare(strict_types=1);
 namespace muqsit\invmenu\session;
 
 use Closure;
-use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\session\network\PlayerNetwork;
 use pocketmine\player\Player;
+use function spl_object_id;
 
 final class PlayerSession{
 
-	protected Player $player;
-	protected PlayerNetwork $network;
-	protected ?InvMenuInfo $current = null;
+	private ?InvMenuInfo $current = null;
 
-	public function __construct(Player $player, PlayerNetwork $network){
-		$this->player = $player;
-		$this->network = $network;
-	}
+	public function __construct(
+		readonly public Player $player,
+		readonly public PlayerNetwork $network
+	){}
 
 	/**
 	 * @internal
 	 */
 	public function finalize() : void{
 		if($this->current !== null){
-            $this->current->graphic->remove($this->player);
+			$this->current->graphic->remove($this->player);
 			$this->player->removeCurrentWindow();
 		}
-		$this->network->dropPending();
+		$this->network->finalize();
 	}
 
 	public function getCurrent() : ?InvMenuInfo{
@@ -39,34 +37,53 @@ final class PlayerSession{
 	 * @internal use InvMenu::send() instead.
 	 *
 	 * @param InvMenuInfo|null $current
-	 * @param Closure|null $callback
-	 *
-	 * @phpstan-param Closure(bool) : void $callback
+	 * @param (Closure(bool) : void)|null $callback
 	 */
 	public function setCurrentMenu(?InvMenuInfo $current, ?Closure $callback = null) : void{
+		if($this->current !== null){
+			$this->current->graphic->remove($this->player);
+		}
+
 		$this->current = $current;
 
 		if($this->current !== null){
-			$this->network->waitUntil($this->network->getGraphicWaitDuration(), function(bool $success) use($callback) : void{
-				if($this->current !== null){
-					if($success && $this->current->graphic->sendInventory($this->player, $this->current->menu->getInventory())){
-						if($callback !== null){
-							$callback(true);
+			$current_id = spl_object_id($this->current);
+			$this->current->graphic->send($this->player, $this->current->graphic_name);
+			$this->network->waitUntil(PlayerNetwork::DELAY_TYPE_OPERATION, $this->current->graphic->getAnimationDuration(), function(bool $success) use($callback, $current_id) : bool{
+				$current = $this->current;
+				if($current !== null && spl_object_id($current) === $current_id){
+					if($success){
+						$this->network->onBeforeSendMenu($this, $current);
+						$result = $current->graphic->sendInventory($this->player, $current->menu->getInventory());
+						if($result){
+							if($callback !== null){
+								$callback(true);
+							}
+							return false;
 						}
-						return;
 					}
 
 					$this->removeCurrentMenu();
-					if($callback !== null){
-						$callback(false);
-					}
 				}
+				if($callback !== null){
+					$callback(false);
+				}
+				return false;
 			});
 		}else{
-			$this->network->wait($callback ?? static function(bool $success) : void{});
+			$this->network->wait(PlayerNetwork::DELAY_TYPE_ANIMATION_WAIT, static function(bool $success) use($callback) : bool{
+				if($callback !== null){
+					$callback($success);
+				}
+				return false;
+			});
 		}
 	}
 
+	/**
+	 * @deprecated Access {@see PlayerSession::$network} directly
+	 * @return PlayerNetwork
+	 */
 	public function getNetwork() : PlayerNetwork{
 		return $this->network;
 	}
@@ -77,7 +94,6 @@ final class PlayerSession{
 	 */
 	public function removeCurrentMenu() : bool{
 		if($this->current !== null){
-			$this->current->graphic->remove($this->player);
 			$this->setCurrentMenu(null);
 			return true;
 		}

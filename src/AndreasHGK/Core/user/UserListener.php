@@ -28,11 +28,12 @@ class UserListener implements Listener {
         $player->teleport(new Position($vec->x, $vec->y, $vec->z, $defaultWorld));
 
         $user = UserManager::getInstance()->get($player, true);
-        if(($nick = $user->getNick()) !== ""){
+		$nick = $user->getNick();
+        if($nick !== ""){
             $player->setDisplayName(TextFormat::colorize($nick));
         }
 
-        VaultManager::getInstance()->load($user);
+        VaultManager::getInstance()->get($user);
 
         $user->setJoinTime(time());
 

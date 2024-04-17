@@ -5,6 +5,7 @@ namespace AndreasHGK\Core\achievement;
 use AndreasHGK\Core\user\OfflineUser;
 use AndreasHGK\Core\user\UserManager;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+use pocketmine\network\mcpe\protocol\types\LevelSoundEvent;
 use pocketmine\player\Player;
 
 class AchievementManager {
@@ -46,7 +47,7 @@ class AchievementManager {
             $player = $user->getPlayer();
             /** @var $player Player */
             $player->sendMessage($string);
-            $pk = LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_LEVELUP, $player->getPosition(), 0x10000000 * intdiv(30, 5));
+            $pk = LevelSoundEventPacket::create(LevelSoundEvent::LEVELUP, $player->getPosition(), 0x10000000 * intdiv(30, 5), "", false, false);
             $player->getNetworkSession()->sendDataPacket($pk);
             return true;
         }

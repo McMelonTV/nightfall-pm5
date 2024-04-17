@@ -35,10 +35,12 @@ class TagManager {
     }
 
     public function loadAll() : void {
-        $tags = DataManager::getKey(FileUtils::MakeYAML("tags"),  "tags", []);
-        foreach($tags as $id => $tag){
-            $this->load($id);
-        }
+        $tags = DataManager::getKey(FileUtils::MakeYAML("tags"),  "tags", false);
+		if (is_array($tags)) {
+			foreach($tags as $id => $tag){
+				$this->load($id);
+			}
+		}
     }
 
     public function load(string $tagId) : ?Tag {

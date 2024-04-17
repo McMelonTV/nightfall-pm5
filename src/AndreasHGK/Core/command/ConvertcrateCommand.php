@@ -36,7 +36,7 @@ class ConvertcrateCommand extends Executor
             return true;
         }
 
-        $pos = $block->getPos();
+        $pos = $block->getPosition();
         $tile = $pos->getWorld()->getTileAt($pos->getX(), $pos->getY(), $pos->getZ());
         if($tile === null){
             $sender->sendMessage("§r§c§l> §r§7Please open the chest once before converting it.");

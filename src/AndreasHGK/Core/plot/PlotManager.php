@@ -112,10 +112,12 @@ class PlotManager {
     }
 
     public function loadAll() : void {
-        $plots = DataManager::getKey(FileUtils::MakeJSON("plots"),  "plots", []);
-        foreach($plots as $id => $plot){
-            $this->load($id);
-        }
+        $plots = DataManager::getKey(FileUtils::MakeJSON("plots"),  "plots", false);
+		if (is_array($plots)) {
+			foreach($plots as $id => $plot){
+				$this->load($id);
+			}
+		}
     }
 
     public function load(string $plotId) : ?Plot {

@@ -9,12 +9,12 @@ use AndreasHGK\Core\user\User;
 use AndreasHGK\Core\user\UserManager;
 use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\IntUtils;
+use PresentKim\ItemSerialize\ItemSerializeUtils;
 use muqsit\invmenu\inventory\InvMenuInventory;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\player\Player;
 use pocketmine\world\sound\ClickSound;
 
@@ -154,14 +154,14 @@ class ShopInventory {
 
         $key = 0;
         foreach ($categories as $category){
-            $item = ItemFactory::getInstance()->get($category->getItemId());
+            $item = ItemSerializeUtils::jsonDeserialize($category->getItemIcon());
             $item->setCustomName("§r".$category->getTag());
             $item->setNamedTag($item->getNamedTag()->setString("shopMenuCategory", $category->getName()));
             $menu->getInventory()->setItem($key, $item);
             ++$key;
         }
 
-        $backItem = ItemFactory::getInstance()->get(ItemIds::BARRIER, 0, 1);
+        $backItem = VanillaBlocks::BARRIER()->asItem();
         $backItem->setCustomName("§cExit shop");
         $backItem->setNamedTag($backItem->getNamedTag()->setString("shopMenuItem", "exit"));
         $menu->getInventory()->setItem(53, $backItem);
@@ -189,14 +189,14 @@ class ShopInventory {
 
             $key = 0;
             foreach ($categories as $category){
-                $item = ItemFactory::getInstance()->get($category->getItemId());
+                $item = ItemSerializeUtils::jsonDeserialize($category->getItemIcon());
                 $item->setCustomName("§r".$category->getTag());
                 $item->setNamedTag($item->getNamedTag()->setString("shopMenuCategory", $category->getName()));
                 $menu->getInventory()->setItem($key, $item);
                 ++$key;
             }
 
-            $backItem = ItemFactory::getInstance()->get(ItemIds::BARRIER, 0, 1);
+            $backItem = VanillaBlocks::BARRIER()->asItem();
             $backItem->setCustomName("§cExit shop");
             $backItem->setNamedTag($backItem->getNamedTag()->setString("shopMenuItem", "exit"));
             $menu->getInventory()->setItem(53, $backItem);
@@ -235,7 +235,7 @@ class ShopInventory {
                 ++$key;
             }
 
-            $backItem = ItemFactory::getInstance()->get(ItemIds::BARRIER, 0, 1);
+            $backItem = VanillaBlocks::BARRIER()->asItem();
             $backItem->setCustomName("§cReturn");
             $backItem->setNamedTag($backItem->getNamedTag()->setString("shopMenuItem", "back"));
             $menu->getInventory()->setItem(53, $backItem);

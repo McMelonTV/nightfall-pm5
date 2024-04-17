@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace AndreasHGK\Core\item;
 
 use AndreasHGK\Core\utils\EnchantmentUtils;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\block\utils\DyeColor;
+use pocketmine\item\VanillaItems;
 
 class MagicDust extends CustomItem {
 
     public function __construct(){
-        $item = ItemFactory::getInstance()->get(ItemIds::DYE, 18, 1);
+        $item = VanillaItems::DYE()->setColor(DyeColor::BLUE);
         $item->setCustomName("§r§1Magic Dust");
         EnchantmentUtils::applyGlow($item);
         $item->setNamedTag($item->getNamedTag()->setInt("customitem", self::MAGICDUST));

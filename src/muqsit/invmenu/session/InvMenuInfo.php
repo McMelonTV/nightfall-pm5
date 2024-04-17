@@ -9,11 +9,9 @@ use muqsit\invmenu\type\graphic\InvMenuGraphic;
 
 final class InvMenuInfo{
 
-	public InvMenu $menu;
-	public InvMenuGraphic $graphic;
-
-	public function __construct(InvMenu $menu, InvMenuGraphic $graphic){
-		$this->menu = $menu;
-		$this->graphic = $graphic;
-	}
+	public function __construct(
+		readonly public InvMenu $menu,
+		readonly public InvMenuGraphic $graphic,
+		readonly public ?string $graphic_name
+	){}
 }

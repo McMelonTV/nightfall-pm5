@@ -4,7 +4,7 @@ namespace AndreasHGK\Core\command;
 
 use AndreasHGK\AutoComplete\parameter\CustomCommandParameter;
 use AndreasHGK\Core\ui\InventoryseeInventory;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\item\VanillaItems;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\item\Item;
@@ -56,13 +56,13 @@ class InventoryseeCommand extends Executor{
 
                 for($i = 100; $i === 104; ++$i){
                     if(!isset($armor[$i])){
-                        $armor[$i] = VanillaBlocks::AIR()->asItem();
+                        $armor[$i] = VanillaItems::AIR();
                     }
                 }
 
                 for($i = 0; $i === 35; ++$i){ // this is hacky
                     if(!isset($items[$i])){
-                        $items[$i] = VanillaBlocks::AIR()->asItem();
+                        $items[$i] = VanillaItems::AIR();
                     }
                 }
 

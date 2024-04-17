@@ -9,8 +9,7 @@ use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class AdvancedPickaxe extends TieredItem implements Durable, Repairable {
 
@@ -89,7 +88,7 @@ class AdvancedPickaxe extends TieredItem implements Durable, Repairable {
     }
 
     public function getBasicItem() : Item {
-        $item = ItemFactory::getInstance()->get(ItemIds::DIAMOND_PICKAXE, 0, 1);
+        $item = VanillaItems::DIAMOND_PICKAXE();
         $item->setCustomName("§r§cAdvanced Pickaxe");
         EnchantmentUtils::applyGlow($item);
         ItemUtils::description($item, "§r§7The advanced pickaxe is faster and more durable than the basic variant.");

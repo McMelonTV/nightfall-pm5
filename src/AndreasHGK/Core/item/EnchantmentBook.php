@@ -11,8 +11,7 @@ use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\IntUtils;
 use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class EnchantmentBook extends VariantItem {
 
@@ -55,7 +54,7 @@ class EnchantmentBook extends VariantItem {
     }
 
     public function getBasicItem() : Item {
-        $item = ItemFactory::getInstance()->get(ItemIds::ENCHANTED_BOOK);
+        $item = VanillaItems::ENCHANTED_BOOK();
         EnchantmentUtils::applyGlow($item);
         return $item;
     }

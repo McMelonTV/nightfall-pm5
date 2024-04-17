@@ -130,10 +130,12 @@ class BannedUserManager {
     }
 
     public function loadAll() : void {
-        $bans = DataManager::getKey(FileUtils::MakeJSON("bans"),  "bans", []);
-        foreach($bans as $name => $ban){
-            $this->load($name);
-        }
+        $bans = DataManager::getKey(FileUtils::MakeJSON("bans"),  "bans", false);
+		if (is_array($bans)) {
+			foreach($bans as $name => $ban){
+				$this->load($name);
+			}
+		}
     }
 
     public function load(string $tagId) : ?BannedUser {

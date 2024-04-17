@@ -8,7 +8,7 @@ use AndreasHGK\Core\enchant\CustomEnchant;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
-use pocketmine\item\ItemIds;
+use pocketmine\item\ItemTypeIds;
 
 final class ItemUtils {
 
@@ -28,54 +28,54 @@ final class ItemUtils {
     public const MAX_QUALITY = 30;
 
     public static function getType(Item $item) : string {
-        switch ($item->getId()){
-            case ItemIds::WOODEN_PICKAXE:
-            case ItemIds::STONE_PICKAXE:
-            case ItemIds::IRON_PICKAXE:
-            case ItemIds::GOLD_PICKAXE:
-            case ItemIds::DIAMOND_PICKAXE:
+        switch ($item->getTypeId()){
+            case ItemTypeIds::WOODEN_PICKAXE:
+            case ItemTypeIds::STONE_PICKAXE:
+            case ItemTypeIds::IRON_PICKAXE:
+            case ItemTypeIds::GOLDEN_PICKAXE:
+            case ItemTypeIds::DIAMOND_PICKAXE:
                 return CustomEnchant::TYPE_PICKAXE;
-            case ItemIds::WOODEN_AXE:
-            case ItemIds::STONE_AXE:
-            case ItemIds::IRON_AXE:
-            case ItemIds::GOLD_AXE:
-            case ItemIds::DIAMOND_AXE:
+            case ItemTypeIds::WOODEN_AXE:
+            case ItemTypeIds::STONE_AXE:
+            case ItemTypeIds::IRON_AXE:
+            case ItemTypeIds::GOLDEN_AXE:
+            case ItemTypeIds::DIAMOND_AXE:
                 return CustomEnchant::TYPE_AXE;
-            case ItemIds::WOODEN_SHOVEL:
-            case ItemIds::STONE_SHOVEL:
-            case ItemIds::IRON_SHOVEL:
-            case ItemIds::GOLD_SHOVEL:
-            case ItemIds::DIAMOND_SHOVEL:
+            case ItemTypeIds::WOODEN_SHOVEL:
+            case ItemTypeIds::STONE_SHOVEL:
+            case ItemTypeIds::IRON_SHOVEL:
+            case ItemTypeIds::GOLDEN_SHOVEL:
+            case ItemTypeIds::DIAMOND_SHOVEL:
                 return CustomEnchant::TYPE_SHOVEL;
-            case ItemIds::WOODEN_SWORD:
-            case ItemIds::STONE_SWORD:
-            case ItemIds::IRON_SWORD:
-            case ItemIds::GOLD_SWORD:
-            case ItemIds::DIAMOND_SWORD:
+            case ItemTypeIds::WOODEN_SWORD:
+            case ItemTypeIds::STONE_SWORD:
+            case ItemTypeIds::IRON_SWORD:
+            case ItemTypeIds::GOLDEN_SWORD:
+            case ItemTypeIds::DIAMOND_SWORD:
                 return CustomEnchant::TYPE_SWORD;
-            case ItemIds::LEATHER_HELMET:
-            case ItemIds::CHAIN_HELMET:
-            case ItemIds::IRON_HELMET:
-            case ItemIds::GOLD_HELMET:
-            case ItemIds::DIAMOND_HELMET:
+            case ItemTypeIds::LEATHER_CAP:
+            case ItemTypeIds::CHAINMAIL_HELMET:
+            case ItemTypeIds::IRON_HELMET:
+            case ItemTypeIds::GOLDEN_HELMET:
+            case ItemTypeIds::DIAMOND_HELMET:
                 return CustomEnchant::TYPE_HELMET;
-            case ItemIds::LEATHER_CHESTPLATE:
-            case ItemIds::CHAIN_CHESTPLATE:
-            case ItemIds::IRON_CHESTPLATE:
-            case ItemIds::GOLD_CHESTPLATE:
-            case ItemIds::DIAMOND_CHESTPLATE:
+            case ItemTypeIds::LEATHER_TUNIC:
+            case ItemTypeIds::CHAINMAIL_CHESTPLATE:
+            case ItemTypeIds::IRON_CHESTPLATE:
+            case ItemTypeIds::GOLDEN_CHESTPLATE:
+            case ItemTypeIds::DIAMOND_CHESTPLATE:
                 return CustomEnchant::TYPE_CHESTPLATE;
-            case ItemIds::LEATHER_LEGGINGS:
-            case ItemIds::CHAIN_LEGGINGS:
-            case ItemIds::IRON_LEGGINGS:
-            case ItemIds::GOLD_LEGGINGS:
-            case ItemIds::DIAMOND_LEGGINGS:
+            case ItemTypeIds::LEATHER_PANTS:
+            case ItemTypeIds::CHAINMAIL_LEGGINGS:
+            case ItemTypeIds::IRON_LEGGINGS:
+            case ItemTypeIds::GOLDEN_LEGGINGS:
+            case ItemTypeIds::DIAMOND_LEGGINGS:
                 return CustomEnchant::TYPE_LEGGINGS;
-            case ItemIds::LEATHER_BOOTS:
-            case ItemIds::CHAIN_BOOTS:
-            case ItemIds::IRON_BOOTS:
-            case ItemIds::GOLD_BOOTS:
-            case ItemIds::DIAMOND_BOOTS:
+            case ItemTypeIds::LEATHER_BOOTS:
+            case ItemTypeIds::CHAINMAIL_BOOTS:
+            case ItemTypeIds::IRON_BOOTS:
+            case ItemTypeIds::GOLDEN_BOOTS:
+            case ItemTypeIds::DIAMOND_BOOTS:
                 return CustomEnchant::TYPE_BOOTS;
             default:
                 return "";

@@ -16,6 +16,8 @@ use pocketmine\plugin\PluginOwnedTrait;
 abstract class NFPluginCommand extends Command implements PluginOwned {
     use PluginOwnedTrait;
 
+	private $owningPlugin;
+
     public function __construct(string $name, Plugin $owner){
         parent::__construct($name);
         $this->owningPlugin = $owner;
