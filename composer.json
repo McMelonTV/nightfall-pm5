@@ -6,12 +6,10 @@
         "phpstan/phpstan": "^1.10",
         "pocketmine/pocketmine-mp": "^5.14"
     },
-    "autoload": {
-        "psr-4": {
-            "Mcmelon\\NightfallPm5\\": "src/"
-        }
-    },
     "authors": [
+        {
+            "name": "AndreasHGK"
+        },
         {
             "name": "McMelonTV",
             "email": "mcmelontube@gmail.com"

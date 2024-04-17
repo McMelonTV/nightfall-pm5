@@ -310,9 +310,9 @@ class UserData {
         return $return;
     }
 
-    public function getEffectiveMaxPlots() : int {
-        return $this->getMaxPlots() + max($this->getRank()->getPlots(), $this->getDonatorRank() !== null ? $this->getDonatorRank()->getVaults() : 0);
-    }
+    // public function getEffectiveMaxPlots() : int {
+    //     return $this->getMaxPlots() + max($this->getRank()->getPlots(), $this->getDonatorRank() !== null ? $this->getDonatorRank()->getVaults() : 0);
+    // }
 
     public function getMaxPlots() : int {
         return $this->maxPlots;
@@ -466,9 +466,9 @@ class UserData {
         $this->cooldowns = $cooldowns;
     }
 
-    public function getVault() : Vault {
-        return VaultManager::getInstance()->get($this);
-    }
+    // public function getVault() : Vault {
+    //     return VaultManager::getInstance()->get($this);
+    // }
 
     public function getTotalEarnedMoney() : float {
         return $this->totalEarned;

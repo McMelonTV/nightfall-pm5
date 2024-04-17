@@ -8,7 +8,7 @@ class ShopCategory {
 
     private $name;
 
-    private $itemId;
+    private $itemIcon;
 
     private $tag;
 
@@ -21,8 +21,8 @@ class ShopCategory {
         return $this->name;
     }
 
-    public function getItemId() : int {
-        return $this->itemId;
+    public function getItemIcon() : string {
+        return $this->itemIcon;
     }
 
     public function getTag() : string {
@@ -48,9 +48,9 @@ class ShopCategory {
         $this->items = $items;
     }
 
-    public function __construct(string $name, int $itemId, array $items = [], string $tag = null){
+    public function __construct(string $name, string $itemIcon, array $items = [], string $tag = null){
         $this->name = $name;
-        $this->itemId = $itemId;
+        $this->itemIcon = $itemIcon;
         $this->items = $items;
         $this->tag = $tag ?? "§7".$name;
         foreach($this->items as $item){

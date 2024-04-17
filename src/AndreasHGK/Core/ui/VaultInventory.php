@@ -12,9 +12,10 @@ use muqsit\invmenu\inventory\InvMenuInventory;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
+use pocketmine\block\utils\DyeColor;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\inventory\Inventory;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 
 class VaultInventory {
@@ -85,34 +86,33 @@ class VaultInventory {
     public static function updatePage(Vault $vault, Inventory $invMenu) : void {
         $page = $vault->getPage($vault->getOpenedPage());
         for($i = 0; $i < 45; ++$i){
-            $invMenu->setItem($i, $page[$i] ?? ItemFactory::air());
+            $invMenu->setItem($i, $page[$i] ?? VanillaItems::AIR());
         }
 
-        $if = ItemFactory::getInstance();
         for($i = 45; $i < 54; ++$i){
             switch ($i){
                 case 48:
-                    $item = $vault->getOpenedPage() !== 1 ? $if->get(ItemIds::PAPER, 0, 1) : $if->get(ItemIds::BARRIER, 0, 1);
+                    $item = $vault->getOpenedPage() !== 1 ? VanillaItems::PAPER() : VanillaBlocks::BARRIER()->asItem();
                     $item->setCustomName("§r§bPrevious §7page");
-                    $item->setNamedTag($item->getNamedTag()->setString("vaultMenuItem", "previous", true));
+                    $item->setNamedTag($item->getNamedTag()->setString("vaultMenuItem", "previous"));
                     $invMenu->setItem($i, $item);
                     break;
                 case 49:
-                    $item = $if->get(ItemIds::CHEST, 14, 1);
+                    $item = VanillaBlocks::CHEST()->asItem();
                     $item->setCustomName("§r§7Page §b".$vault->getOpenedPage()."§8/§b".$vault->getEffectiveMaxPages());
-                    $item->setNamedTag($item->getNamedTag()->setString("vaultMenuItem", "page", true));
+                    $item->setNamedTag($item->getNamedTag()->setString("vaultMenuItem", "page"));
                     $invMenu->setItem($i, $item);
                     break;
                 case 50:
-                    $item = $vault->getOpenedPage() !== $vault->getEffectiveMaxPages() ? $if->get(ItemIds::PAPER, 14, 1) : $if->get(ItemIds::BARRIER, 0, 1);
+                    $item = $vault->getOpenedPage() !== $vault->getEffectiveMaxPages() ? VanillaItems::PAPER() : VanillaBlocks::BARRIER()->asItem();
                     $item->setCustomName("§r§bNext §7page");
-                    $item->setNamedTag($item->getNamedTag()->setString("vaultMenuItem", "next", true));
+                    $item->setNamedTag($item->getNamedTag()->setString("vaultMenuItem", "next"));
                     $invMenu->setItem($i, $item);
                     break;
                 default:
-                    $item = $if->get(ItemIds::STAINED_GLASS_PANE, 14, 1);
+                    $item = VanillaBlocks::STAINED_GLASS_PANE()->setColor(DyeColor::RED)->asItem();
                     $item->setCustomName("§r§c/");
-                    $item->setNamedTag($item->getNamedTag()->setString("vaultMenuItem", "occupied", true));
+                    $item->setNamedTag($item->getNamedTag()->setString("vaultMenuItem", "occupied"));
                     $invMenu->setItem($i, $item);
                     break;
             }

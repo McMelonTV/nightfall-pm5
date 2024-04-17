@@ -25,7 +25,7 @@ class IdCommand extends Executor{
             return true;
         }
 
-        $sender->sendMessage("§r§b§l> §r§7Block id:§c".$target->getId()."§7 meta:§c".$target->getMeta());
+        $sender->sendMessage("§r§b§l> §r§7Block typeId:§c".$target->getTypeId()."§7 state:§c".$target->getStateId());
         return true;
     }
 

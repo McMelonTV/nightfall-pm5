@@ -28,11 +28,11 @@ class MessagesListener implements Listener {
     public function onPreLogin(PlayerPreLoginEvent $ev) : void {
         $player = $ev->getPlayerInfo();
         if(!Server::getInstance()->isWhitelisted($player->getUsername()) && Server::getInstance()->hasWhitelist()){
-            $ev->setKickReason(PlayerPreLoginEvent::KICK_REASON_SERVER_FULL, "§8[§bNightfall§8]\n§7The server is currently undergoing maintenance.\n§7Contact us at: §bdiscord.nightfall.xyz");
+            $ev->setKickFlag(PlayerPreLoginEvent::KICK_FLAG_SERVER_FULL, "§8[§bNightfall§8]\n§7The server is currently undergoing maintenance.\n§7Contact us at: §bdiscord.nightfall.xyz");
         }
 
         if(count(Server::getInstance()->getOnlinePlayers()) >= Server::getInstance()->getMaxPlayers()){
-            $ev->setKickReason(PlayerPreLoginEvent::KICK_REASON_SERVER_FULL, "§8[§bNightfall§8]\n§7The server is currently full.");
+            $ev->setKickFlag(PlayerPreLoginEvent::KICK_FLAG_SERVER_FULL, "§8[§bNightfall§8]\n§7The server is currently full.");
         }
     }
 }

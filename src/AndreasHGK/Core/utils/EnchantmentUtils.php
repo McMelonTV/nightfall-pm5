@@ -13,6 +13,7 @@ use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\protocol\AddActorPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+use pocketmine\network\mcpe\protocol\types\LevelSoundEvent;
 
 final class EnchantmentUtils{
 
@@ -95,7 +96,8 @@ final class EnchantmentUtils{
         $strike->motion = null;
         $strike->position = $player->getPosition();
         $player->getWorld()->broadcastPacketToViewers($player->getPosition(), $strike);
-        $sound = LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_THUNDER, $player->getPosition());
+		//this might not work
+        $sound = LevelSoundEventPacket::create(LevelSoundEvent::THUNDER, $player->getPosition(), 0, "", false, false);
         $sound->extraData = 1;
         $sound->entityType = "minecraft:lightning_bolt";
         $player->getWorld()->broadcastPacketToViewers($player->getPosition(), $sound);

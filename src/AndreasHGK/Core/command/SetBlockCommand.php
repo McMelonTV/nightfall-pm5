@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AndreasHGK\Core\command;
 
-use pocketmine\block\BlockFactory;
+// use pocketmine\block\BlockFactory;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
@@ -32,7 +32,8 @@ class SetBlockCommand extends Executor{
         $meta = (int)array_shift($args);
 
         $sender->sendMessage($pos->__toString());
-        $sender->getPosition()->getWorld()->setBlock($pos, BlockFactory::getInstance()->get($id, $meta), false);
+        // $sender->getPosition()->getWorld()->setBlock($pos, BlockFactory::getInstance()->get($id, $meta), false);
+		// todo
         return true;
     }
 

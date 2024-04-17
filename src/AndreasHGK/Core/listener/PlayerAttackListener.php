@@ -14,7 +14,7 @@ use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
-use pocketmine\item\ItemFactory;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use pocketmine\Server;
 
@@ -93,7 +93,7 @@ class PlayerAttackListener implements Listener {
                 $targetUser->sendTip("§r§8[§bNF§8]\n§r§7Your armor has no durability left.\n§r§7Repair it using §b/forge§r§7.");
 
                 $targetInventory->addItem($item);
-                $armorInventory->setItem($slot, ItemFactory::air());
+                $armorInventory->setItem($slot, VanillaItems::AIR());
                 continue;
             }
 

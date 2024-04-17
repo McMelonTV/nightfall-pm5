@@ -12,13 +12,13 @@ use AndreasHGK\Core\ItemInterface;
 use AndreasHGK\Core\Price;
 use AndreasHGK\Core\user\UserManager;
 use jojoe77777\FormAPI\SimpleForm;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 
 class DisenchantForm {
 
     public static function sendTo(Player $sender) : void {
-        if($sender->getInventory()->getItemInHand()->getId() === ItemIds::AIR){
+        if($sender->getInventory()->getItemInHand()->getTypeId() === VanillaItems::AIR()->getTypeId()){
             $sender->sendMessage("§r§c§l> §r§7Please hold an item to disenchant.");
             return;
         }
@@ -73,7 +73,7 @@ class DisenchantForm {
                 return;
             }
 
-            if($sender->getInventory()->getItemInHand()->getId() === ItemIds::AIR){
+            if($sender->getInventory()->getItemInHand()->getTypeId() === VanillaItems::AIR()->getTypeId()){
                 $sender->sendMessage("§r§c§l> §r§7Please hold an item to disenchant.");
                 return;
             }

@@ -76,7 +76,7 @@ class AutoComplete {
                 $aliasObj = new CommandEnum(ucfirst($command->getName()) . "Aliases", $aliases);
             }
             //$commandData = new CommandData($name, $command->getDescription(), ($customCommandData->isDebugCommand() ? 1 : 0), (int)$command->testPermissionSilent($player), $aliasObj, []);
-            $commandData = new CommandData($name, $command->getDescription(), ($customCommandData->isDebugCommand() ? 1 : 0), 0, $aliasObj, []);
+            $commandData = new CommandData($name, $command->getDescription(), ($customCommandData->isDebugCommand() ? 1 : 0), 0, $aliasObj, [], []);
 
             foreach($customCommandData->getParameters() as $x => $paramMap){
                 if(!$player->hasPermission($paramMap->getPermission()) && $paramMap->getPermission() !== "") continue;

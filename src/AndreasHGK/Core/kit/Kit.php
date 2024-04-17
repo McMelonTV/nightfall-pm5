@@ -128,7 +128,8 @@ class Kit {
 
     public function getCooldownTime(User $user) : int {
         if(!isset($user->getKitCooldowns()[$this->getId()])) return 0;
-        return $user->getKitCooldowns()[$this->getId()] + $this->getCooldown() - time();
+        $float = $user->getKitCooldowns()[$this->getId()] + $this->getCooldown() - time();
+		return (int) $float;
     }
 
     public function getCooldown() : int {

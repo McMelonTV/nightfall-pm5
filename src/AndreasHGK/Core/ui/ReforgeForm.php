@@ -9,13 +9,14 @@ use AndreasHGK\Core\Price;
 use AndreasHGK\Core\user\UserManager;
 use AndreasHGK\Core\utils\ItemUtils;
 use jojoe77777\FormAPI\SimpleForm;
-use pocketmine\item\ItemIds;
+use pocketmine\block\BlockTypeIds;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 
 class ReforgeForm {
 
     public static function sendTo(Player $sender) : void {
-        if($sender->getInventory()->getItemInHand()->getId() === ItemIds::AIR){
+        if($sender->getInventory()->getItemInHand()->getTypeId() === VanillaItems::AIR()->getTypeId()){
             $sender->sendMessage("§r§c§l> §r§7Please hold an item to reforge.");
             return;
         }
@@ -37,7 +38,7 @@ class ReforgeForm {
                 return;
             }
 
-            if($sender->getInventory()->getItemInHand()->getId() === ItemIds::AIR){
+            if($sender->getInventory()->getItemInHand()->getTypeId() === VanillaItems::AIR()->getTypeId()){
                 $sender->sendMessage("§r§c§l> §r§7Please hold an item to rename.");
                 return;
             }

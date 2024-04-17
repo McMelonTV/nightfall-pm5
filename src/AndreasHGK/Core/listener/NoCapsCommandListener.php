@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace AndreasHGK\Core\listener;
 
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerCommandPreprocessEvent;
+use pocketmine\event\server\CommandEvent;
 
 class NoCapsCommandListener implements Listener {
 
     /**
-     * @param PlayerCommandPreprocessEvent $ev
+     * @param CommandEvent $ev
      *
      * @priority highest
      */
-    public function onCommand(PlayerCommandPreprocessEvent $ev) : void {
-        $msg = $ev->getMessage();
+    public function onCommand(CommandEvent $ev) : void {
+		//this might not be right
+        $msg = $ev->getCommand();
         if(substr($msg, 0, 1) !== "/" && substr($msg, 0, 2) !== "./") {
             return;
         }
@@ -25,7 +26,7 @@ class NoCapsCommandListener implements Listener {
 
         $msg = implode(" ", $msgA);
 
-        $ev->setMessage($msg);
+        $ev->setCommand($msg);
     }
 
 }

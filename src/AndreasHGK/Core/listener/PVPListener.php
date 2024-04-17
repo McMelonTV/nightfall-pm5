@@ -8,15 +8,15 @@ use AndreasHGK\Core\Core;
 use AndreasHGK\Core\pvp\PVPZoneManager;
 use AndreasHGK\Core\task\DelayedCommandTask;
 use AndreasHGK\Core\user\UserManager;
-use pocketmine\block\BlockLegacyIds;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\server\CommandEvent;
 use pocketmine\player\GameMode;
 use pocketmine\player\Player;
 use pocketmine\Server;
@@ -24,15 +24,19 @@ use pocketmine\Server;
 class PVPListener implements Listener {
 
     /**
-     * @param PlayerCommandPreprocessEvent $ev
+     * @param CommandEvent $ev
      *
      * @priority High
      */
-    public function onCommand(PlayerCommandPreprocessEvent $ev) : void {
-        $player = $ev->getPlayer();
+    public function onCommand(CommandEvent $ev) : void {
+        $player = $ev->getSender();
+		//return if console
+		if($player instanceof ConsoleCommandSender || !$player instanceof Player) {
+			return;
+		}
         if(PVPZoneManager::getInstance()->isPVPZone($player->getPosition()->getX(), $player->getPosition()->getY(), $player->getPosition()->getZ(), $player->getWorld())){
-            $msg = $ev->getMessage();
-            if(strpos($ev->getMessage(), "/") !== 0) {
+            $msg = $ev->getCommand();
+            if(strpos($ev->getCommand(), "/") !== 0) {
                 return;
             }
 
@@ -48,8 +52,10 @@ class PVPListener implements Listener {
                 }
             }
 
+			// huh???? this make no sense
+
             $sentCommandLabel = "";
-            $command = Server::getInstance()->getCommandMap()->matchCommand($sentCommandLabel, $args);
+            $command = Server::getInstance()->getCommandMap()->getCommand($sentCommandLabel);
             if($command === null) {
                 return;
             }
@@ -186,7 +192,7 @@ class PVPListener implements Listener {
             return;
         }
 
-        if($ev->getDamager()->getId() === BlockLegacyIds::MAGMA){
+        if($ev->getDamager()->getTypeId() === VanillaBlocks::MAGMA()->getTypeId()){
             $ev->cancel();
         }
     }

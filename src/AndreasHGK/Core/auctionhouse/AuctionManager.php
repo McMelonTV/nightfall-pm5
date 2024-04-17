@@ -6,9 +6,10 @@ use AndreasHGK\Core\manager\DataManager;
 use AndreasHGK\Core\user\User;
 use AndreasHGK\Core\user\UserManager;
 use AndreasHGK\Core\utils\FileUtils;
-use CortexPE\DiscordWebhookAPI\Embed;
-use CortexPE\DiscordWebhookAPI\Message;
-use CortexPE\DiscordWebhookAPI\Webhook;
+// use CortexPE\DiscordWebhookAPI\Embed;
+// use CortexPE\DiscordWebhookAPI\Message;
+// use CortexPE\DiscordWebhookAPI\Webhook;
+use PresentKim\ItemSerialize\ItemSerializeUtils;
 use pocketmine\item\Item;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -22,7 +23,7 @@ class AuctionManager {
      */
     private $auctionItems = [];
 
-    private ?Webhook $webhook = null;
+    // private ?Webhook $webhook = null;
 
     public function expire(string $seller, string $id) : void {
         $auc = $this->get($seller, $id);
@@ -130,34 +131,39 @@ class AuctionManager {
         return $this->getByFullId($fullId) !== null;
     }
 
-    public function webhookMessage(string $message, ?Embed $embed = null) : void{
-        if($this->webhook === null){
-            return;
-        }
+    // public function webhookMessage(string $message, ?Embed $embed = null) : void{
+    //     if($this->webhook === null){
+    //         return;
+    //     }
 
-        $msg = new Message();
-        $msg->setAvatarURL("");
-        $msg->setUsername("Auction House Logger");
-        $msg->setContent($message);
-        if($embed !== null){
-            $msg->addEmbed($embed);
-        }
+    //     $msg = new Message();
+    //     $msg->setAvatarURL("");
+    //     $msg->setUsername("Auction House Logger");
+    //     $msg->setContent($message);
+    //     if($embed !== null){
+    //         $msg->addEmbed($embed);
+    //     }
 
-        $this->webhook->send($msg);
-    }
+    //     $this->webhook->send($msg);
+    // }
 
     public function loadAll() : void {
-        $webhook = DataManager::getKey(FileUtils::MakeJSON("auction"),  "webhook", "");
-        if($webhook !== "") {
-            $this->webhook = new Webhook($webhook);
-        }
+        // $webhook = DataManager::getKey(FileUtils::MakeJSON("auction"),  "webhook", false);
+        // if($webhook !== "") {
+        //     $this->webhook = new Webhook($webhook);
+        // }
 
-        $items = DataManager::getKey(FileUtils::MakeJSON("auction"),  "auction", []);
-        foreach($items as $seller => $sellerItems){
-            foreach($sellerItems as $id => $item){
-                $this->load($seller, $id);
-            }
-        }
+        $items = DataManager::getKey(FileUtils::MakeJSON("auction"),  "auction", false);
+		
+		if (is_array($items)) {
+			foreach($items as $seller => $sellerItems){
+				if (is_array($sellerItems)) {
+					foreach($sellerItems as $id => $item){
+						$this->load($seller, $id);
+					}
+				}
+			}
+		}
     }
 
     public function load(string $seller, string $itemId) : ?AuctionItem {
@@ -165,7 +171,7 @@ class AuctionManager {
         $id = $itemData["id"];
         $seller = $itemData["seller"];
         $sellTime = $itemData["sellTime"];
-        $item = Item::jsonDeserialize($itemData["item"]);
+		$item = ItemSerializeUtils::jsonDeserialize($itemData["item"]);
         $price = $itemData["price"];
         $tag = new AuctionItem($id, $item, $seller, $sellTime, $price);
         $this->auctionItems[$seller][$id] = $tag;
@@ -186,7 +192,7 @@ class AuctionManager {
                 $data["id"] = $auctionItem->getId();
                 $data["seller"] = $auctionItem->getSeller();
                 $data["sellTime"] = $auctionItem->getSellTime();
-                $data["item"] = $auctionItem->getItem()->jsonSerialize();
+				$data["item"] = ItemSerializeUtils::jsonSerialize($auctionItem->getItem());
                 $data["price"] = $auctionItem->getPrice();
                 $sellerArray[$auctionItem->getId()] = $data;
             }

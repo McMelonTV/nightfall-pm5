@@ -92,7 +92,7 @@ final class Plot {
         $zMax = max($pos1->getZ(), $pos2->getZ());
         for($x = $xMin; $x - 16 <= $xMax; $x += 16){
             for($z = $zMin; $z - 16 <= $zMax; $z += 16){
-                $chunks[World::chunkHash($x >> 4, $z >> 4)] = FastChunkSerializer::serialize($world->loadChunk($x >> 4, $z >> 4), false);
+                $chunks[World::chunkHash($x >> 4, $z >> 4)] = FastChunkSerializer::serializeTerrain($world->loadChunk($x >> 4, $z >> 4));
             }
         }
 

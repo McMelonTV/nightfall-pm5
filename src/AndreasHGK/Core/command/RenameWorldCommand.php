@@ -36,7 +36,7 @@ class RenameWorldCommand extends Executor{
         $name = implode(" ", $args);
         $world = $sender->getWorld();
 
-        $world->getProvider()->getWorldData()->setString("LevelName", $name);
+        $world->getProvider()->getWorldData()->setName($name);
 
         $sender->sendMessage("§r§b§l> §r§7Changed the current level's name to §b".$name."§r§7.");
         return true;

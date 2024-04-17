@@ -17,19 +17,14 @@ final class TagUtils{
         switch ($rarity){
             case Tag::COMMON:
                 return "§7";
-                break;
             case Tag::UNCOMMON:
                 return "§a";
-                break;
             case Tag::RARE:
                 return "§9";
-                break;
             case Tag::VERY_RARE:
                 return "§5";
-                break;
             case Tag::LEGENDARY:
                 return "§b";
-                break;
             default:
                 return "§7";
         }
@@ -40,19 +35,14 @@ final class TagUtils{
         switch ($rarity){
             case Tag::COMMON:
                 return "common";
-                break;
             case Tag::UNCOMMON:
                 return "uncommon";
-                break;
             case Tag::RARE:
                 return "rare";
-                break;
             case Tag::VERY_RARE:
                 return "very rare";
-                break;
             case Tag::LEGENDARY:
                 return "legendary";
-                break;
             default:
                 return "common";
         }

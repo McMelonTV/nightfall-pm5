@@ -10,7 +10,8 @@ use AndreasHGK\Core\ui\CrateItemsInventory;
 use AndreasHGK\Core\user\UserManager;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\item\ItemIds;
+use pocketmine\block\BlockTypeIds;
+use pocketmine\item\VanillaItems;
 
 class CrateListener implements Listener {
 
@@ -19,7 +20,7 @@ class CrateListener implements Listener {
         $locations = CrateManager::getInstance()->getAllLocations();
 
         foreach($locations as $location){
-            if($location->equals($block->getPos())){
+            if($location->equals($block->getPosition())){
                 $crate = $location;
                 break;
             }
@@ -35,7 +36,7 @@ class CrateListener implements Listener {
 
         //key check
         $hand = $player->getInventory()->getItemInHand();
-        if($hand->getId() === ItemIds::AIR || $hand->getNamedTag()->getTag("cratekey") === null){
+        if($hand->getTypeId() === VanillaItems::AIR()->getTypeId() || $hand->getNamedTag()->getTag("cratekey") === null){
             $player->sendMessage("§r§c§l> §r§7You require a key to open a crate.");
             return;
         }
@@ -72,6 +73,6 @@ class CrateListener implements Listener {
             $player->sendMessage("§r§b§l> §r§7You received §b".$item->getItem()->getCount()."x ".($item->getCrateName() ?? $item->getItem()->getName())."§r§7 from the crate.");
         }
 
-        Core::getInstance()->getScheduler()->scheduleRepeatingTask(new CrateAnimation($player, $block->getPos(), $item), 1);
+        Core::getInstance()->getScheduler()->scheduleRepeatingTask(new CrateAnimation($player, $block->getPosition(), $item), 1);
     }
 }

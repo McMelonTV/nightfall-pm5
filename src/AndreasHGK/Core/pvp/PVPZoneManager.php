@@ -102,10 +102,12 @@ class PVPZoneManager {
     }
 
     public function loadAll() : void {
-        $zones = DataManager::getKey(FileUtils::MakeYAML("pvpzones"),  "pvpzones", []);
-        foreach($zones as $id => $zone){
-            $this->load($id);
-        }
+        $zones = DataManager::getKey(FileUtils::MakeYAML("pvpzones"),  "pvpzones", false);
+		if (is_array($zones)) {
+			foreach($zones as $id => $zone){
+				$this->load($id);
+			}
+		}
     }
 
     public function load(string $zoneId) : ?PVPZone {

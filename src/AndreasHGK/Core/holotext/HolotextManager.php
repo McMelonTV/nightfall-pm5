@@ -30,10 +30,12 @@ class HolotextManager {
     }
 
     public function loadAll() : void {
-        $texts = DataManager::getKey(FileUtils::MakeYAML("holotext"),  "holotext", []);
-        foreach($texts as $id => $text){
-            $this->load($id);
-        }
+        $texts = DataManager::getKey(FileUtils::MakeYAML("holotext"),  "holotext", false);
+		if (is_array($texts)) {
+			foreach($texts as $id => $text){
+				$this->load($id);
+			}
+		}
     }
 
     public function getNextId() : string {
@@ -49,7 +51,7 @@ class HolotextManager {
         $worldManager = Server::getInstance()->getWorldManager();
         $worldManager->loadWorld($textData["world"]);
         $world = $worldManager->getWorldByName($textData["world"]);
-        $holotext = new Holotext($textId, new Location($textData["x"], $textData["y"], $textData["z"], 0, 0, $world), $textData["text"], $textData["title"] ?? "");
+        $holotext = new Holotext($textId, new Location($textData["x"], $textData["y"], $textData["z"], $world, 0, 0), $textData["text"], $textData["title"] ?? "");
 
         $holotext->spawnToAll();
 

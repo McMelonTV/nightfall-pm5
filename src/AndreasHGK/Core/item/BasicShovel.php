@@ -9,8 +9,7 @@ use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class BasicShovel extends TieredItem implements Durable, Repairable {
 
@@ -54,7 +53,7 @@ class BasicShovel extends TieredItem implements Durable, Repairable {
     }
 
     public function getBasicItem() : Item {
-        $item = ItemFactory::getInstance()->get(ItemIds::IRON_SHOVEL, 0, 1);
+        $item = VanillaItems::IRON_SHOVEL();
         $item->setCustomName("§r§bBasic Shovel");
         EnchantmentUtils::applyGlow($item);
         ItemUtils::description($item, "§r§7A basic shovel, crafted using steeldust.");

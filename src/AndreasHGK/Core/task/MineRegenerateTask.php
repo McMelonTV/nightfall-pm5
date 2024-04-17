@@ -64,7 +64,7 @@ class MineRegenerateTask extends AsyncTask {
             World::getXZ($key, $chunkX, $chunkZ);
             $chunkX <<= 4;
             $chunkZ <<= 4;
-            $chunk = FastChunkSerializer::deserialize($chunkHash);
+            $chunk = FastChunkSerializer::deserializeTerrain($chunkHash);
             for($y = $minY; $y < $maxY; ++$y){
                 for($x = 0; $x < 16; ++$x){
                     for($z = 0; $z < 16; ++$z){
@@ -73,15 +73,16 @@ class MineRegenerateTask extends AsyncTask {
                         }
 
                         $block = explode(":", (string)$blockArray[array_rand($blockArray)]);
-                        $blockClass = BlockFactory::getInstance()->get((int)$block[0], isset($block[1]) ? (int)$block[1] : 0);
-                        $chunk->setFullBlock($x, $y, $z, $blockClass->getFullId());
+                        // $blockClass = BlockFactory::getInstance()->get((int)$block[0], isset($block[1]) ? (int)$block[1] : 0);
+                        // $chunk->setFullBlock($x, $y, $z, $blockClass->getFullId());
+						$chunk->setBlockStateId($x, $y, $z, (int)$block[0]);
 
                         ++$completedBlocks;
                     }
                 }
             }
 
-            $newChunks[$key] = FastChunkSerializer::serialize($chunk, false);
+            $newChunks[$key] = FastChunkSerializer::serializeTerrain($chunk);
         }
 
         $this->setResult($newChunks);
@@ -98,7 +99,7 @@ class MineRegenerateTask extends AsyncTask {
 
         foreach($chunks as $key => $chunk){
             World::getXZ($key, $chunkX, $chunkZ);
-            $world->setChunk($chunkX, $chunkZ, FastChunkSerializer::deserialize($chunk), false);
+            $world->setChunk($chunkX, $chunkZ, FastChunkSerializer::deserializeTerrain($chunk));
         }
 
         $maxY = $mine->getPos2()->y+1;

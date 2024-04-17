@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace muqsit\invmenu;
 
 use Closure;
-use InvalidStateException;
+use LogicException;
 use muqsit\invmenu\inventory\SharedInvMenuSynchronizer;
 use muqsit\invmenu\session\InvMenuInfo;
+use muqsit\invmenu\session\network\PlayerNetwork;
 use muqsit\invmenu\transaction\DeterministicInvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
@@ -32,10 +33,8 @@ class InvMenu implements InvMenuTypeIds{
 	}
 
 	/**
-	 * @param Closure|null $listener
-	 * @return Closure
-	 *
-	 * @phpstan-param Closure(DeterministicInvMenuTransaction) : void $listener
+	 * @param (Closure(DeterministicInvMenuTransaction) : void)|null $listener
+	 * @return Closure(InvMenuTransaction) : InvMenuTransactionResult
 	 */
 	public static function readonly(?Closure $listener = null) : Closure{
 		return static function(InvMenuTransaction $transaction) use($listener) : InvMenuTransactionResult{
@@ -47,7 +46,7 @@ class InvMenu implements InvMenuTypeIds{
 		};
 	}
 
-	protected InvMenuType $type;
+	readonly public InvMenuType $type;
 	protected ?string $name = null;
 	protected ?Closure $listener = null;
 	protected ?Closure $inventory_close_listener = null;
@@ -56,13 +55,21 @@ class InvMenu implements InvMenuTypeIds{
 
 	public function __construct(InvMenuType $type, ?Inventory $custom_inventory = null){
 		if(!InvMenuHandler::isRegistered()){
-			throw new InvalidStateException("Tried creating menu before calling " . InvMenuHandler::class . "::register()");
+			throw new LogicException("Tried creating menu before calling " . InvMenuHandler::class . "::register()");
 		}
 		$this->type = $type;
 		$this->inventory = $this->type->createInventory();
 		$this->setInventory($custom_inventory);
 	}
 
+	public function __destruct(){
+		$this->setInventory(null);
+	}
+
+	/**
+	 * @deprecated Access {@see InvMenu::$type} directly
+	 * @return InvMenuType
+	 */
 	public function getType() : InvMenuType{
 		return $this->type;
 	}
@@ -77,10 +84,15 @@ class InvMenu implements InvMenuTypeIds{
 	}
 
 	/**
-	 * @param Closure|null $listener
+	 * @return (Closure(InvMenuTransaction) : InvMenuTransactionResult)|null
+	 */
+	public function getListener() : ?Closure{
+		return $this->listener;
+	}
+
+	/**
+	 * @param (Closure(InvMenuTransaction) : InvMenuTransactionResult)|null $listener
 	 * @return self
-	 *
-	 * @phpstan-param Closure(InvMenuTransaction) : InvMenuTransactionResult $listener
 	 */
 	public function setListener(?Closure $listener) : self{
 		$this->listener = $listener;
@@ -88,46 +100,19 @@ class InvMenu implements InvMenuTypeIds{
 	}
 
 	/**
-	 * @param Closure|null $listener
+	 * @return (Closure(Player, Inventory) : void)|null
+	 */
+	public function getInventoryCloseListener() : ?Closure{
+		return $this->inventory_close_listener;
+	}
+
+	/**
+	 * @param (Closure(Player, Inventory) : void)|null $listener
 	 * @return self
-	 *
-	 * @phpstan-param Closure(Player, Inventory) : void $listener
 	 */
 	public function setInventoryCloseListener(?Closure $listener) : self{
 		$this->inventory_close_listener = $listener;
 		return $this;
-	}
-
-	/**
-	 * @param Player $player
-	 * @param string|null $name
-	 * @param Closure|null $callback
-	 *
-	 * @phpstan-param Closure(bool) : void $callback
-	 */
-	final public function send(Player $player, ?string $name = null, ?Closure $callback = null) : void{
-		$session = InvMenuHandler::getPlayerManager()->get($player);
-		$network = $session->getNetwork();
-		$network->dropPending();
-
-		$player->removeCurrentWindow();
-
-		$network->waitUntil($network->getGraphicWaitDuration(), function(bool $success) use($player, $session, $name, $callback) : void{
-			if($success){
-				$graphic = $this->type->createGraphic($this, $player);
-				if($graphic !== null){
-					$graphic->send($player, $name);
-					$session->setCurrentMenu(new InvMenuInfo($this, $graphic), $callback);
-				}else{
-					$session->removeCurrentMenu();
-					if($callback !== null){
-						$callback(false);
-					}
-				}
-			}elseif($callback !== null){
-				$callback(false);
-			}
-		});
 	}
 
 	public function getInventory() : Inventory{
@@ -143,6 +128,51 @@ class InvMenu implements InvMenuTypeIds{
 		if($custom_inventory !== null){
 			$this->synchronizer = new SharedInvMenuSynchronizer($this, $custom_inventory);
 		}
+	}
+
+	/**
+	 * @param Player $player
+	 * @param string|null $name
+	 * @param (Closure(bool) : void)|null $callback
+	 */
+	final public function send(Player $player, ?string $name = null, ?Closure $callback = null) : void{
+		$player->removeCurrentWindow();
+
+		$session = InvMenuHandler::getPlayerManager()->get($player);
+		$network = $session->network;
+
+		// Avoid players from spamming InvMenu::send() and other similar
+		// requests and filling up queued tasks in memory.
+		// It would be better if this check were implemented by plugins,
+		// however I suppose it is more convenient if done within InvMenu...
+		if($network->getPending() >= 8){
+			$network->dropPending();
+		}else{
+			$network->dropPendingOfType(PlayerNetwork::DELAY_TYPE_OPERATION);
+		}
+
+		$network->waitUntil(PlayerNetwork::DELAY_TYPE_OPERATION, 0, function(bool $success) use($player, $session, $name, $callback) : bool{
+			if(!$success){
+				if($callback !== null){
+					$callback(false);
+				}
+				return false;
+			}
+
+			$graphic = $this->type->createGraphic($this, $player);
+			if($graphic !== null){
+				$session->setCurrentMenu(new InvMenuInfo($this, $graphic, $name), static function(bool $success) use($callback) : void{
+					if($callback !== null){
+						$callback($success);
+					}
+				});
+			}else{
+				if($callback !== null){
+					$callback(false);
+				}
+			}
+			return false;
+		});
 	}
 
 	/**

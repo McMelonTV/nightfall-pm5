@@ -13,9 +13,9 @@ use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\event\Listener;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+use pocketmine\network\mcpe\protocol\types\LevelSoundEvent;
 
 class EnchantmentBookListener implements Listener{
 
@@ -30,11 +30,11 @@ class EnchantmentBookListener implements Listener{
             if($action instanceof SlotChangeAction){
                 $sourceItem = $action->getSourceItem();
                 $targetItem = $action->getTargetItem();
-                if($targetItem->getId() === ItemIds::AIR || $sourceItem->getId() === ItemIds::AIR) {
+                if($targetItem->getTypeId() === VanillaItems::AIR()->getTypeId() || $sourceItem->getTypeId() === VanillaItems::AIR()->getTypeId()) {
                     continue;
                 }
 
-                if($sourceItem->getId() === ItemIds::ENCHANTED_BOOK && $targetItem->getId() === ItemIds::ENCHANTED_BOOK){
+                if($sourceItem->getTypeId() === VanillaItems::ENCHANTED_BOOK()->getTypeId() && $targetItem->getTypeId() === VanillaItems::ENCHANTED_BOOK()->getTypeId()){
                     if(!isset($book1)){
                         $book1 = $sourceItem;
                         $book2 = $targetItem;
@@ -47,12 +47,12 @@ class EnchantmentBookListener implements Listener{
                         $slot1 = $action->getSlot();
                         $inv1 = $action->getInventory();
                     }
-                }elseif($sourceItem->getId() === ItemIds::ENCHANTED_BOOK){
+                }elseif($sourceItem->getTypeId() === VanillaItems::ENCHANTED_BOOK()->getTypeId()){
                     $book = $sourceItem;
                     $apply = $targetItem;
                     $applySlot = $action->getSlot();
                     $applyInv = $action->getInventory();
-                }elseif($targetItem->getId() === ItemIds::ENCHANTED_BOOK){
+                }elseif($targetItem->getTypeId() === VanillaItems::ENCHANTED_BOOK()->getTypeId()){
                     $bookSlot = $action->getSlot();
                     $bookInv = $action->getInventory();
                 }
@@ -108,21 +108,21 @@ class EnchantmentBookListener implements Listener{
             $book2->setLore([EnchantmentBook::lore($ench2)]);
 
             if($slot1 === 0){
-                $inv1->setItem($slot1, ItemFactory::air());
+                $inv1->setItem($slot1, VanillaItems::AIR());
                 $inv2->setItem($slot2, $book2);
             }elseif($slot2 === 0){
-                $inv2->setItem($slot2, ItemFactory::air());
+                $inv2->setItem($slot2, VanillaItems::AIR());
                 $inv1->setItem($slot1, $book2);
             }else{
                 //pocket edition?
-                $inv1->setItem($slot1, ItemFactory::air());
+                $inv1->setItem($slot1, VanillaItems::AIR());
                 $inv2->setItem($slot2, $book2);
             }
 
             $ev->cancel();
             $player->sendMessage("§r§l§b> §r§7You successfully leveled up the enchantment.");
 
-            $sound = LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_NOTE, $player->getPosition(), (15 << 8) | 255);
+            $sound = LevelSoundEventPacket::create(LevelSoundEvent::NOTE, $player->getPosition(), (15 << 8) | 255, "", false, false);
 
             $player->getNetworkSession()->sendDataPacket($sound);
             return;
@@ -180,7 +180,7 @@ class EnchantmentBookListener implements Listener{
             $interface->saveStats();
             $apply = $interface->getItem();
 
-            $applyInv->setItem($applySlot, ItemFactory::air());
+            $applyInv->setItem($applySlot, VanillaItems::AIR());
             $bookInv->setItem($bookSlot, $apply);
 
             $price->pay($player);

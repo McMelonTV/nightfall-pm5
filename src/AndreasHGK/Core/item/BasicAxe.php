@@ -9,8 +9,7 @@ use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class BasicAxe extends TieredItem implements Durable, Repairable {
 
@@ -54,7 +53,7 @@ class BasicAxe extends TieredItem implements Durable, Repairable {
     }
 
     public function getBasicItem() : Item {
-        $item = ItemFactory::getInstance()->get(ItemIds::IRON_AXE, 0, 1);
+        $item = VanillaItems::IRON_AXE();
         $item->setCustomName("§r§bBasic Axe");
         EnchantmentUtils::applyGlow($item);
         ItemUtils::description($item, "§r§7A basic axe, crafted using steeldust.");

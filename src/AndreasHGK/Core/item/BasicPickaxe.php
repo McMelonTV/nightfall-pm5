@@ -9,8 +9,7 @@ use AndreasHGK\Core\utils\EnchantmentUtils;
 use AndreasHGK\Core\utils\ItemUtils;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 
 class BasicPickaxe extends TieredItem implements Durable, Repairable {
 
@@ -87,7 +86,7 @@ class BasicPickaxe extends TieredItem implements Durable, Repairable {
     }
 
     public function getBasicItem() : Item {
-        $item = ItemFactory::getInstance()->get(ItemIds::IRON_PICKAXE, 0, 1);
+        $item = VanillaItems::IRON_PICKAXE();
         $item->setCustomName("§r§bBasic Pickaxe");
         EnchantmentUtils::applyGlow($item);
         ItemUtils::description($item, "§r§7A basic pickaxe, crafted using steeldust.");

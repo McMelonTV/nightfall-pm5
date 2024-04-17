@@ -1,0 +1,88 @@
+ranks:
+  member:
+    id: "member"
+    name: "Member"
+    permissions:
+      - "nightfall.kit.starter"
+    prefix: "§fMember"
+    isDefault: true
+    priority: 0
+  mercenary:
+    id: "mercenary"
+    name: "Mercenary"
+    permissions:
+      - "nightfall.kit.mercenary"
+      - "nightfall.command.nick"
+    prefix: "§eMercenary"
+    plots: 1
+    vaults: 1
+    inherit:
+      - member
+    isDonator: true
+    priority: 10
+  warrior:
+    id: "warrior"
+    name: "Warrior"
+    permissions:
+      - "nightfall.kit.warrior"
+      - "nightfall.tag.colored"
+      - "nightfall.chat.colored"
+    prefix: "§4Warrior"
+    plots: 1
+    vaults: 2
+    inherit:
+      - mercenary
+    isDonator: true
+    priority: 20
+  knight:
+    id: "knight"
+    name: "Knight"
+    permissions:
+      - "nightfall.kit.knight"
+      - "nightfall.command.fly"
+    prefix: "§2Knight"
+    plots: 2
+    vaults: 3
+    inherit:
+      - warrior
+    isDonator: true
+    priority: 30
+  lord:
+    id: "lord"
+    name: "Lord"
+    permissions:
+      - "nightfall.kit.lord"
+      - "nightfall.command.size"
+    prefix: "§cLord"
+    plots: 2
+    vaults: 4
+    inherit:
+      - knight
+    isDonator: true
+    priority: 40
+  titan:
+    id: "titan"
+    name: "Titan"
+    permissions:
+      - "nightfall.kit.titan"
+    prefix: "§9Titan"
+    plots: 3
+    vaults: 5
+    inherit:
+      - lord
+    isDonator: true
+    priority: 50
+  admin:
+    id: "admin"
+    name: "Admin"
+    prefix: "§4Admin"
+    isStaff: true
+    priority: 90
+  owner:
+    id: "owner"
+    name: "Owner"
+    prefix: "§4Owner"
+    isStaff: true
+    inherit:
+      - admin
+    priority: 100

@@ -7,7 +7,9 @@ namespace AndreasHGK\Core\ui;
 use AndreasHGK\Core\Price;
 use AndreasHGK\Core\utils\ItemUtils;
 use jojoe77777\FormAPI\CustomForm;
-use pocketmine\item\ItemIds;
+use pocketmine\block\BlockTypeIds;
+use pocketmine\item\ItemTypeIds;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 
@@ -15,7 +17,7 @@ class RenameForm{
 
     public static function sendTo(Player $sender) : void {
         $hand = $sender->getInventory()->getItemInHand();
-        if($hand->getId() === ItemIds::AIR){
+        if($hand->getTypeId() === VanillaItems::AIR()->getTypeId()){
             $sender->sendMessage("§r§c§l> §r§7Please hold an item to rename.");
             return;
         }
@@ -52,12 +54,12 @@ class RenameForm{
                 return;
             }
 
-            switch ($hand->getId()){
-                case ItemIds::ENCHANTED_BOOK:
-                case ItemIds::GLOWSTONE:
-                case ItemIds::GLOWSTONE_DUST:
-                case ItemIds::DYE:
-                case ItemIds::TRIPWIRE_HOOK:
+            switch ($hand->getTypeId()){
+                case ItemTypeIds::ENCHANTED_BOOK:
+                case BlockTypeIds::GLOWSTONE:
+                case ItemTypeIds::GLOWSTONE_DUST:
+                case ItemTypeIds::DYE:
+                case BlockTypeIds::TRIPWIRE_HOOK:
                     $sender->sendMessage("§r§c§l> §r§7You can't rename this item.");
                     return;
             }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AndreasHGK\Core\generator;
 
-use pocketmine\block\BlockLegacyIds;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\world\ChunkManager;
 use pocketmine\world\generator\Generator;
 use pocketmine\world\generator\InvalidGeneratorOptionsException;
@@ -34,26 +34,26 @@ class PlotGenerator extends Generator {
 
     public function generateChunk(ChunkManager $world, int $chunkX, int $chunkZ) : void{
         $chunk = $world->getChunk($chunkX, $chunkZ);
-        $bedrock = $this->getFullId(BlockLegacyIds::BEDROCK);
-        $grass = $this->getFullId(BlockLegacyIds::GRASS);
-        $dirt = $this->getFullId(BlockLegacyIds::DIRT);
-        $path = $this->getFullId(BlockLegacyIds::GRASS_PATH);
-        $slab = $this->getFullId(BlockLegacyIds::STONE_SLAB3, 2);
-        $stone = $this->getFullId(BlockLegacyIds::STONE, 6);
+        $bedrock = VanillaBlocks::BEDROCK()->getStateId();
+        $grass = VanillaBlocks::GRASS()->getStateId();
+        $dirt = VanillaBlocks::DIRT()->getStateId();
+        $path = VanillaBlocks::GRASS_PATH()->getStateId();
+        $slab = VanillaBlocks::POLISHED_ANDESITE_SLAB()->getStateId();
+        $stone = VanillaBlocks::POLISHED_ANDESITE()->getStateId();
         for($x = 0; $x < 16; ++$x){
             for($z = 0; $z < 16; ++$z){
                 $type = self::getTypeAt($x+(16*$chunkX), $z+(16*$chunkZ), $this->plotSize);
                 for($y = 0; $y <= $this->floorLevel+1; ++$y){
                     if($y === 0){
-                        $chunk->setFullBlock($x, $y, $z, $bedrock);
+                        $chunk->setBlockStateId($x, $y, $z, $bedrock);
                         continue;
                     }
 
                     if($type === self::PLOT){
                         if($y === $this->floorLevel) {
-                            $chunk->setFullBlock($x, $y, $z, $grass);
+                            $chunk->setBlockStateId($x, $y, $z, $grass);
                         }elseif($y < $this->floorLevel) {
-                            $chunk->setFullBlock($x, $y, $z, $dirt);
+                            $chunk->setBlockStateId($x, $y, $z, $dirt);
                         }
 
                         continue;
@@ -61,17 +61,17 @@ class PlotGenerator extends Generator {
 
                     if($type === self::ROAD){
                         if($y === $this->floorLevel) {
-                            $chunk->setFullBlock($x, $y, $z, $path);
+                            $chunk->setBlockStateId($x, $y, $z, $path);
                         }elseif($y < $this->floorLevel) {
-                            $chunk->setFullBlock($x, $y, $z, $dirt);
+                            $chunk->setBlockStateId($x, $y, $z, $dirt);
                         }
 
                         continue;
                     }
                     if($y === $this->floorLevel+1) {
-                        $chunk->setFullBlock($x, $y, $z, $slab);
+                        $chunk->setBlockStateId($x, $y, $z, $slab);
                     }else{
-                        $chunk->setFullBlock($x, $y, $z, $stone);
+                        $chunk->setBlockStateId($x, $y, $z, $stone);
                     }
                 }
             }
@@ -117,17 +117,4 @@ class PlotGenerator extends Generator {
             return self::ROAD;
         }
     }
-
-    /**
-     * @internal
-     *
-     * @param int $id
-     * @param int $meta
-     *
-     * @return int
-     */
-    public function getFullId(int $id, int $meta = 0) : int{
-        return ($id << 4) | $meta;
-    }
-
 }

@@ -16,6 +16,11 @@ use pocketmine\utils\EnumTrait;
  */
 final class GangRank{
     use EnumTrait;
+	private $value;
+
+	public function __construct(string $value){
+		$this->value = $value;
+	}
 
     protected static function setup() : void{
         self::registerAll(

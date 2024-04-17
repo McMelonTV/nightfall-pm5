@@ -39,21 +39,21 @@ final class KothManager{
         }
 
         //Server::getInstance()->broadcastMessage($koth->getName() . " KOTH has started in Mine PvP");
-        if($this->spawnNext === 0) {
-            $koth = $this->koths[mt_rand(0, 1) === 0 ? "Cave" : "Forest"];
-            Server::getInstance()->broadcastMessage("§8§l<-----§aKOTH§8----->§r" .
-                "\n §a§l> §r§a" . $koth->getName() . " §7KOTH has started in Mine PvP!§r" .
-                "\n §a§l> §r§7Follow the §a" . $koth->getColor() . " §7path to get there!§r" .
-                "\n §a§8§l<-----++----->");
-        }else{
-            $koth = $this->koths["Spawn"];
-            Server::getInstance()->broadcastMessage("§8§l<-----§aKOTH§8----->§r" .
-                "\n §a§l> §r§a" . $koth->getName() . " §7KOTH has started in Spawn PvP!§r" .
-                "\n §a§l> §r§7Go to the tree in the middle of spawn pvp to get there!§r" .
-                "\n §a§8§l<-----++----->");
-        }
+        // if($this->spawnNext === 0) {
+        //     $koth = $this->koths[mt_rand(0, 1) === 0 ? "Cave" : "Forest"];
+        //     Server::getInstance()->broadcastMessage("§8§l<-----§aKOTH§8----->§r" .
+        //         "\n §a§l> §r§a" . $koth->getName() . " §7KOTH has started in Mine PvP!§r" .
+        //         "\n §a§l> §r§7Follow the §a" . $koth->getColor() . " §7path to get there!§r" .
+        //         "\n §a§8§l<-----++----->");
+        // }else{
+        //     $koth = $this->koths["Spawn"];
+        //     Server::getInstance()->broadcastMessage("§8§l<-----§aKOTH§8----->§r" .
+        //         "\n §a§l> §r§a" . $koth->getName() . " §7KOTH has started in Spawn PvP!§r" .
+        //         "\n §a§l> §r§7Go to the tree in the middle of spawn pvp to get there!§r" .
+        //         "\n §a§8§l<-----++----->");
+        // }
 
-        $this->running = $koth;
+        // $this->running = $koth;
     }
 
     public function stop() : void{
@@ -89,9 +89,9 @@ final class KothManager{
         $minePvP = $worldManager->getWorldByName(Core::PVPMINEWORLD);
         $spawn = $worldManager->getWorldByName("spawn");
         $koths = [
-            new Koth("Cave", "red", 60*15*2, 0, new Vector3(-62, 24, -27), new Vector3(-67, 32, -32), $minePvP),
-            new Koth("Forest", "blue", 60*15*2, 0, new Vector3(-73, 62, 77), new Vector3(-66, 69, 84), $minePvP),
-            new Koth("Spawn", "", 60*10*2, 1, new Vector3(1575, 11, 696), new Vector3(1580, 17, 701), $spawn)
+            // new Koth("Cave", "red", 60*15*2, 0, new Vector3(-62, 24, -27), new Vector3(-67, 32, -32), $minePvP),
+            // new Koth("Forest", "blue", 60*15*2, 0, new Vector3(-73, 62, 77), new Vector3(-66, 69, 84), $minePvP),
+            // new Koth("Spawn", "", 60*10*2, 1, new Vector3(1575, 11, 696), new Vector3(1580, 17, 701), $spawn)
         ];
 
         foreach($koths as $koth) {

@@ -10,18 +10,10 @@ use pocketmine\network\mcpe\protocol\types\inventory\WindowTypes;
 
 final class InvMenuTypeRegistry{
 
-	/**
-	 * @var InvMenuType[]
-	 *
-	 * @phpstan-var array<string, InvMenuType>
-	 */
+	/** @var array<string, InvMenuType> */
 	private array $types = [];
 
-	/**
-	 * @var string[]
-	 *
-	 * @phpstan-var array<int, string>
-	 */
+	/** @var array<int, string> */
 	private array $identifiers = [];
 
 	public function __construct(){
@@ -35,6 +27,7 @@ final class InvMenuTypeRegistry{
 			->setBlock(VanillaBlocks::CHEST())
 			->setSize(54)
 			->setBlockActorId("Chest")
+			->setAnimationDuration(75)
 		->build());
 
 		$this->register(InvMenuTypeIds::TYPE_HOPPER, InvMenuTypeBuilders::BLOCK_ACTOR_FIXED()
@@ -71,9 +64,7 @@ final class InvMenuTypeRegistry{
 	}
 
 	/**
-	 * @return InvMenuType[]
-	 *
-	 * @phpstan-return array<string, InvMenuType>
+	 * @return array<string, InvMenuType>
 	 */
 	public function getAll() : array{
 		return $this->types;

@@ -10,6 +10,7 @@ use AndreasHGK\Core\utils\FileUtils;
 use AndreasHGK\Core\utils\StringSet;
 use AndreasHGK\Core\utils\TagUtils;
 use AndreasHGK\Core\warning\Warning;
+use PresentKim\ItemSerialize\ItemSerializeUtils;
 use pocketmine\item\Item;
 use pocketmine\player\IPlayer;
 use pocketmine\player\Player;
@@ -85,6 +86,7 @@ class UserManager {
 
     public function load(IPlayer $player) : OfflineUser {
         $file = DataManager::get(self::USER_FOLDER.FileUtils::MakeJSON(strtolower($player->getName())));
+
         if(!$player instanceof Player){
             $user = new OfflineUser($player, $file->getAll());
         }else{
@@ -133,7 +135,8 @@ class UserManager {
         $user->setIgnoreAll($file->get("ignoreAll", false));
         $user->setSeenRules($file->get("hasSeenRules", false));
         $user->setSize($file->get("size", 100));
-        $user->setVanished($file->get("vanished", false));
+		// Vanish currently crashes the server and I have no idea why lmao
+        // $user->setVanished($file->get("vanished", false));
         $user->setTotalOnlineTime($file->get("totalOnlineTime", 0));
         $warns = [];
         foreach($file->get("warnings", []) as $warnData) {
@@ -144,7 +147,7 @@ class UserManager {
             $id = $data["id"];
             $seller = $data["seller"];
             $sellTime = $data["sellTime"];
-            $item = Item::jsonDeserialize($data["item"]);
+			$item = ItemSerializeUtils::jsonDeserialize($data["item"]);
             $price = $data["price"];
             $user->addExpiredAuctionItem(new AuctionItem($id, $item, $seller, $sellTime, $price));
         }
@@ -230,7 +233,7 @@ class UserManager {
             $data["id"] = $expiredAuctionItem->getId();
             $data["seller"] = $expiredAuctionItem->getSeller();
             $data["sellTime"] = $expiredAuctionItem->getSellTime();
-            $data["item"] = $expiredAuctionItem->getItem()->jsonSerialize();
+			$data["item"] = ItemSerializeUtils::jsonSerialize($expiredAuctionItem->getItem());
             $data["price"] = $expiredAuctionItem->getPrice();
             $auc[$expiredAuctionItem->getId()] = $data;
         }
@@ -267,6 +270,9 @@ class UserManager {
         $user->setPrestigePoints(0);
         $user->setJoinTime(time());
         $user->setTotalOnlineTime(0);
+
+		$user->setBalance(999999999);
+
         $this->save($user);
     }
 

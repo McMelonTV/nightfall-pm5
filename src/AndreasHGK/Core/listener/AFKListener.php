@@ -6,13 +6,14 @@ namespace AndreasHGK\Core\listener;
 
 use AndreasHGK\Core\user\User;
 use AndreasHGK\Core\user\UserManager;
+use pocketmine\console\ConsoleCommandSender;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
-use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerToggleSneakEvent;
+use pocketmine\event\server\CommandEvent;
 use pocketmine\player\OfflinePlayer;
 
 class AFKListener implements Listener {
@@ -83,12 +84,16 @@ class AFKListener implements Listener {
         }
     }
 
-    public function onCommand(PlayerCommandPreprocessEvent $ev) : void{
-        if(explode(" ", $ev->getMessage())[0] === "/afk") {
+    public function onCommand(CommandEvent $ev) : void{
+        if(explode(" ", $ev->getCommand())[0] === "/afk") {
             return;
         }
 
-        $player = $ev->getPlayer();
+        $player = $ev->getSender();
+		//return if console
+		if($player instanceof ConsoleCommandSender) {
+			return;
+		}
         $user = UserManager::getInstance()->getOnline($player);
 
         $user->activity = true;

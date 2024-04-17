@@ -10,6 +10,7 @@ use AndreasHGK\Core\holotext\HolotextManager;
 use AndreasHGK\Core\user\UserManager;
 use pocketmine\entity\Location;
 use pocketmine\network\mcpe\protocol\BlockEventPacket;
+use pocketmine\network\mcpe\protocol\types\BlockPosition;
 use pocketmine\player\Player;
 use pocketmine\scheduler\Task;
 use pocketmine\world\Position;
@@ -54,17 +55,17 @@ class CrateAnimation extends Task {
         switch ($this->frame){
             case 0:
                 $user->playSound(new ChestOpenSound());
-                $pk = BlockEventPacket::create(1, 1, $pos);
+                $pk = BlockEventPacket::create(new BlockPosition($pos->getX(), $pos->getY(), $pos->getZ()), 1, 1);
                 $player->getNetworkSession()->sendDataPacket($pk);
 
-                $this->hologram = new Holotext(HolotextManager::getInstance()->getNextId(), new Location($newPos->x, $newPos->y, $newPos->z, 0, 0, $pos->getWorld()), "§r§b".$item->getCount()."§r§bx ".($cItem->getCrateName() ?? $item->getName()));
+                $this->hologram = new Holotext(HolotextManager::getInstance()->getNextId(), new Location($newPos->x, $newPos->y, $newPos->z, $pos->getWorld(), 0, 0), "§r§b".$item->getCount()."§r§bx ".($cItem->getCrateName() ?? $item->getName()));
                 $this->hologram->spawnTo($player);
                 break;
             case 1:
                 $user->playSound(new XpLevelUpSound(5));
                 break;
             case 40:
-                $pk = BlockEventPacket::create(1, 0, $pos);
+                $pk = BlockEventPacket::create(new BlockPosition($pos->getX(), $pos->getY(), $pos->getZ()), 1, 0);
 
                 if(!$player->isConnected()) return;
                 $session = $player->getNetworkSession();

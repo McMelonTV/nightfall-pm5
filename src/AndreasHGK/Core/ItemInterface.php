@@ -113,7 +113,8 @@ class ItemInterface{
     }
 
     public function getDamage() : int {
-        return $this->nfDamage === -1 ? $this->item->getMeta() : $this->nfDamage;
+        // return $this->nfDamage === -1 ? $this->item->getMeta() : $this->nfDamage;
+        return $this->nfDamage === -1 ? 0 : $this->nfDamage;
     }
 
     public function applyDamage(int $damage) : void {
