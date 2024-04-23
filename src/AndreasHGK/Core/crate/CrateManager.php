@@ -296,12 +296,12 @@ class CrateManager {
         $spawn = Server::getInstance()->getWorldManager()->getWorldByName("spawn");
         $this->crateLocations = [
             new Position(1571, 25, 623, $spawn),
-            new Position(1572, 25, 620, $spawn),
-            new Position(1574, 25, 618, $spawn),
-            new Position(1577, 25, 617, $spawn),
-            new Position(1580, 25, 618, $spawn),
-            new Position(1582, 25, 620, $spawn),
-            new Position(1583, 25, 623, $spawn),
+            // new Position(1572, 25, 620, $spawn),
+            // new Position(1574, 25, 618, $spawn),
+            // new Position(1577, 25, 617, $spawn),
+            // new Position(1580, 25, 618, $spawn),
+            // new Position(1582, 25, 620, $spawn),
+            // new Position(1583, 25, 623, $spawn),
         ];
 
         CustomItemManager::getInstance()->register(new CrateKey());

@@ -13,8 +13,8 @@ class Holotext extends FallingBlock {
 
     public string $hologramId;
 
-    protected $gravity = 0.0;
-    protected $drag = 0.0;
+    protected float $gravity = 0.0;
+    protected float $drag = 0.0;
 
     public function __construct(string $id, Location $position, string $text, string $title = ""){
         parent::__construct($position, VanillaBlocks::AIR());

@@ -370,7 +370,7 @@ class User extends OfflineUser {
         if($this->hasTag($tag)){
             $pp = $tag->getRarity()*50;
             $this->setPrestigePoints($this->getPrestigePoints()+$pp);
-            $player->sendMessage("§r§b§l> §r§7You have received a duplicate §r §r".$tag->getTag()."§7 and received§b $pp §7prestige points.");
+            $player->sendMessage("§r§b§l> §r§7You have received a duplicate §r".$tag->getTag()."§r§7 tag and received§b $pp §7prestige points.");
             return;
         }
 
