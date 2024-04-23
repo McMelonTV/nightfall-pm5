@@ -2,7 +2,10 @@
 
 namespace AndreasHGK\Core\shop;
 
+use AndreasHGK\Core\item\CrateKey;
+use AndreasHGK\Core\item\CustomItem;
 use AndreasHGK\Core\item\CustomItemManager;
+use AndreasHGK\Core\item\VariantItem;
 use AndreasHGK\Core\user\User;
 use AndreasHGK\RankSystem\rank\RankInstance;
 use AndreasHGK\RankSystem\RankSystem;
@@ -59,6 +62,13 @@ class ShopCategoryManager {
 
 		$xp_bottle = new ShopItem("xp_bottle", VanillaItems::EXPERIENCE_BOTTLE()->setCount(64), "", 1, 0);
 		$customitems["xp_bottle"] = $xp_bottle;
+
+        /** @var CrateKey $ckeyitem */
+		$ckeyitem = CustomItemManager::getInstance()->get(CustomItem::CRATEKEY);
+        $vote_key = new ShopItem("vote_key", $ckeyitem->getVariant(99)->setCount(64), "", 1, 0);
+        $netherite_key = new ShopItem("vote_key", $ckeyitem->getVariant(50)->setCount(64), "", 1, 0);
+		$customitems["vote_key"] = $vote_key;
+        $customitems["netherite_key"] = $netherite_key;
 
 		$category = new ShopCategory("temporary stuff to mess around with", ItemSerializeUtils::jsonSerialize(VanillaItems::DIAMOND()), $customitems);
 		$defaults[] = $category;

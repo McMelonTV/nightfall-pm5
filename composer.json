@@ -14,5 +14,8 @@
             "name": "McMelonTV",
             "email": "mcmelontube@gmail.com"
         }
-    ]
+    ],
+    "scripts": {
+        "phpstan": "vendor/bin/phpstan -c phpstan.neon"
+    }
 }

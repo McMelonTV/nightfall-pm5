@@ -254,11 +254,11 @@ final class Core extends PluginBase {
             $player->transfer((string)$ip, (int)$port, "The server is restarting...");
         }
 
-        if(function_exists("pcntl_exec")){
-            register_shutdown_function(static function () {
-                pcntl_exec("./start.sh");
-            });
-        }
+//        if(function_exists("pcntl_exec")){
+//            register_shutdown_function(static function () {
+//                pcntl_exec("./start.sh");
+//            });
+//        }
 
         $this->getServer()->shutdown();
     }
@@ -289,13 +289,11 @@ final class Core extends PluginBase {
         AchievementManager::getInstance()->registerDefaults();
         CustomEnchantsManager::getInstance()->registerDefaults();
         CustomItemManager::getInstance()->registerDefaults();
-        ShopCategoryManager::getInstance()->registerDefaults();
-        ForgeCategoryManager::getInstance()->registerDefaults();
-
-        VoteParty::getInstance()->load();
-
         KitManager::getInstance()->registerDefaults();
         CrateManager::getInstance()->registerDefaults();
+        ShopCategoryManager::getInstance()->registerDefaults();
+        ForgeCategoryManager::getInstance()->registerDefaults();
+        VoteParty::getInstance()->load();
 
         if(self::isDevServer()){
             Server::getInstance()->getNetwork()->setName("§8[§bNightfall§8] §7Development server");

@@ -20,12 +20,12 @@ class CrateListener implements Listener {
         $locations = CrateManager::getInstance()->getAllLocations();
 
         foreach($locations as $location){
-            if($location->equals($block->getPosition())){
-                $crate = $location;
+			if($location->equals($block->getPosition()->asVector3())){
+				$crate = $location;
                 break;
             }
         }
-
+		
         if(!isset($crate)) {
             return;
         }
