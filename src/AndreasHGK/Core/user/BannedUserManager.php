@@ -18,11 +18,11 @@ class BannedUserManager {
      */
     private $bans = [];
 
-    private StringSet $names;
+    /*private StringSet $names;
     private StringSet $deviceIds;
     private StringSet $clientIds;
     private StringSet $selfSignedIds;
-    private StringSet $ips;
+    private StringSet $ips;*/
 
     public function ban(OfflineUser $user, string $reason, int $duration = -1, string $banner = null) : BannedUser {
         $time = time();
@@ -46,7 +46,7 @@ class BannedUserManager {
 
         $p = $user->getPlayer();
         if($p instanceof Player){
-            $p->kick("§r§8[§bNF§8]\n§r§7You have been banned from the server by §b".$ban->getBanner()."§r§7!\n§r§7Reason: §b".$reason."\n§r§7Expiration date: §b".($duration > 0 ? date("d/m/Y", $expire)." at ".date("h:i:s", $expire) : "never"), false);
+            $p->kick("§r§8[§bNF§8]\n§r§7You have been banned from the server by §b".$ban->getBanner()."§r§7!\n§r§7Reason: §b".$reason."\n§r§7Expiration date: §b".($duration > 0 ? date("d/m/Y", $expire)." at ".date("h:i:s", $expire) : "never"));
         }
 
         return $ban;
@@ -63,9 +63,9 @@ class BannedUserManager {
     public function isBannedCheckAll(PlayerInfo $info, string $ip) : bool {
         $username = $info->getUsername();
 
-        if($this->names->contains(strtolower($username))){
+        /*if($this->names->contains(strtolower($username))){
             return true;
-        }
+        }*/
 
         $player = Server::getInstance()->getOfflinePlayer($username);
         if($player !== null) {
@@ -73,7 +73,7 @@ class BannedUserManager {
         }
 
         $extraData = $info->getExtraData();
-        if($this->deviceIds->contains((string) $extraData["DeviceId"])){
+        /*if($this->deviceIds->contains((string) $extraData["DeviceId"])){
             return true;
         }
 
@@ -87,9 +87,9 @@ class BannedUserManager {
 
         if($this->ips->contains($ip)){
             return true;
-        }
+        }*/
 
-        if(isset($user)){
+        /*if(isset($user)){
             foreach($user->getIPList()->toArray() as $ip){
                 if($this->ips->contains($ip)){
                     return true;
@@ -113,7 +113,7 @@ class BannedUserManager {
                     return true;
                 }
             }
-        }
+        }*/
 
         return false;
     }
@@ -130,7 +130,7 @@ class BannedUserManager {
     }
 
     public function loadAll() : void {
-        $bans = DataManager::getKey(FileUtils::MakeJSON("bans"),  "bans", false);
+        $bans = DataManager::getKey(FileUtils::MakeJSON("bans"),  "bans", []);
 		if (is_array($bans)) {
 			foreach($bans as $name => $ban){
 				$this->load($name);

@@ -30,7 +30,7 @@ class HolotextManager {
     }
 
     public function loadAll() : void {
-        $texts = DataManager::getKey(FileUtils::MakeYAML("holotext"),  "holotext", false);
+        $texts = DataManager::getKey(FileUtils::MakeYAML("holotext"),  "holotext", []);
 		if (is_array($texts)) {
 			foreach($texts as $id => $text){
 				$this->load($id);
