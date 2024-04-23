@@ -153,7 +153,7 @@ class AuctionManager {
         //     $this->webhook = new Webhook($webhook);
         // }
 
-        $items = DataManager::getKey(FileUtils::MakeJSON("auction"),  "auction", false);
+        $items = DataManager::getKey(FileUtils::MakeJSON("auction"),  "auction", []);
 		
 		if (is_array($items)) {
 			foreach($items as $seller => $sellerItems){

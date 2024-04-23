@@ -43,7 +43,7 @@ class DataManager {
      * @param bool $default
      * @return mixed
      */
-    public static function getKey(string $file, string $key, $default = false){
+    public static function getKey(string $file, string $key, mixed $default = false){
         return self::get($file)->get($key, $default);
     }
 
