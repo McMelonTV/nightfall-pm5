@@ -436,3 +436,6 @@ permissions:
   nightfall.command.near:
     default: op
     description: ""
+  nightfall.command.xp:
+    default: op
+    description: ""
