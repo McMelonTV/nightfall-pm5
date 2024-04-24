@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace AndreasHGK\Core\enchant;
 
+use pocketmine\block\Block;
+use pocketmine\block\RuntimeBlockStateRegistry;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\item\enchantment\ItemFlags;
 use pocketmine\world\utils\SubChunkExplorer;
 use pocketmine\world\utils\SubChunkExplorerStatus;
@@ -51,7 +54,6 @@ class DrillerEnchant extends CustomEnchant {
             return;
         }
 
-        // $blockFactory = BlockFactory::getInstance();
         $array = [];
 
         $pos = $block->getPosition();
@@ -73,12 +75,12 @@ class DrillerEnchant extends CustomEnchant {
                     }
 
                     $state = $subChunkHandler->currentSubChunk->getBlockStateId($x & 15, $y & 15, $z & 15);
-                    // if($state !== static::AIR_STATE){
-                    //     /** @var Block $block */
-                    //     $block = $blockFactory->fromFullBlock($state);
-                    //     $block->position($world, $x, $y, $z);
-                    //     $array[] = $block;
-                    // }
+                    if(RuntimeBlockStateRegistry::getInstance()->fromStateId($state)->getTypeId() !== VanillaBlocks::AIR()->getTypeId()){
+                        /** @var Block $block */
+                        $block = RuntimeBlockStateRegistry::getInstance()->fromStateId($state);
+                        $block->position($world, $x, $y, $z);
+                        $array[] = $block;
+                    }
                 }
             }
         }

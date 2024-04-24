@@ -57,8 +57,18 @@ class ShopCategoryManager {
 		$customitems = [];
 		$allci = CustomItemManager::getInstance()->getAll();
 		foreach($allci as $ci){
-			$customitems[$ci->getId()] = new ShopItem($ci->getId(), $ci->getItem()->setCount($ci->getItem()->getMaxStackSize()), "", 1, 0);
+            if ($ci->getId() === 8) continue;
+			$customitems[$ci->getId()] = new ShopItem((string)$ci->getId(), $ci->getItem()->setCount($ci->getItem()->getMaxStackSize()), "", 1, 0);
 		}
+
+        /** @var VariantItem $ebook */
+        $ebook = CustomItemManager::getInstance()->get(CustomItem::ENCHANTMENTBOOK);
+        $driller = $ebook->getVariant(101, 1)->setCount(1);
+        $driller_ench = new ShopItem("driller_ench", $driller, "", 1, 0, false, $driller->getName(), false, function (User $user) use ($ebook) {
+            $item = $ebook->getVariant(101, 1)->setCount(1);
+            $user->safeGive($item);
+        });
+        $customitems["driller_ench"] = $driller_ench;
 
 		$xp_bottle = new ShopItem("xp_bottle", VanillaItems::EXPERIENCE_BOTTLE()->setCount(64), "", 1, 0);
 		$customitems["xp_bottle"] = $xp_bottle;
