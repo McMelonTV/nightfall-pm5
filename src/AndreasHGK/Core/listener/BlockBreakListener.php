@@ -219,24 +219,19 @@ class BlockBreakListener implements Listener {
 
             $user->addMinedBlock();
 
-            $id = (string)$drop->getTypeId();
+            $id = (string)$drop->nbtSerialize()->getString("Name");
 			//fuck this
             // $meta = (string)$drop->getMeta();
-			$meta = 0;
             $count = $drop->getCount();
-            if(isset($prices[$id.":".$meta])){
-                $price = $prices[$id.":".$meta]*$count;
-            }elseif(isset($prices[$id])){ //isset($mine->getPrices()[(string)$drop->getId().":".$drop->getMeta()])
+            if(isset($prices[$id])){
                 $price = $prices[$id]*$count;
-            }elseif($globalPrices->exist($id.":".$meta)){
-                $price = $globalPrices->get($id.":".$meta)*$count;
             }elseif($globalPrices->exist($id)){
                 $price = $globalPrices->get($id)*$count;
             }else{
                 $playerInventory->addItem($drop);
             }
 
-            if($driller){
+            if ($driller && isset($price)) {
                 $price = 0.1*$price;
             }
 

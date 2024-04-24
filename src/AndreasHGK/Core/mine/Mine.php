@@ -185,7 +185,7 @@ class Mine {
 
         $this->isRegenerating = true;
 
-        $resetTask = new MineRegenerateTask($this->getId(), serialize($this->getPos1()), serialize($this->getPos2()), $chunks, $this->getBlocks());
+        $resetTask = new MineRegenerateTask($this->getId(), $this->getPos1(), $this->getPos2(), $chunks, $this->getBlocks());
         Server::getInstance()->getAsyncPool()->submitTask($resetTask);
     }
 

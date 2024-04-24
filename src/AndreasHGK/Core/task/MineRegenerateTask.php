@@ -6,7 +6,7 @@ namespace AndreasHGK\Core\task;
 
 use AndreasHGK\Core\mine\MineManager;
 use AndreasHGK\Core\mine\RegenerationObserver;
-use pocketmine\block\BlockFactory;
+use pocketmine\item\StringToItemParser;
 use pocketmine\math\Vector3;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\world\format\io\FastChunkSerializer;
@@ -24,25 +24,25 @@ class MineRegenerateTask extends AsyncTask {
 
     protected $blocks;
 
-    public function __construct(int $id, $pos1, $pos2, array $chunks, array $blocks){
+    public function __construct(int $id, Vector3 $pos1, Vector3 $pos2, array $chunks, array $blocks){
         $this->id = $id;
-        $this->minPos = unserialize($pos1);
-        $this->maxPos = unserialize($pos2);
+        $this->minPos = serialize($pos1);
+        $this->maxPos = serialize($pos2);
         $this->chunks = serialize($chunks);
         $this->blocks = serialize($blocks);
     }
 
     private function isInMine($x, $y, $z) : bool{
-        $pos1 = $this->minPos;
-        $pos2 = $this->maxPos;
+        $pos1 = unserialize($this->minPos);
+        $pos2 = unserialize($this->maxPos);
         return ($x >= $pos1->x) && ($x <= $pos2->x)
             && ($y >= $pos1->y) && ($y <= $pos2->y)
             && ($z >= $pos1->z) && ($z <= $pos2->z);
     }
 
     private function isPlayerInMine($x, $y, $z) : bool{
-        $pos1 = $this->minPos;
-        $pos2 = $this->maxPos;
+        $pos1 = unserialize($this->minPos);
+        $pos2 = unserialize($this->maxPos);
         return ($x >= $pos1->x) && ($x <= $pos2->x)
             && ($y >= $pos1->y) && ($y <= $pos2->y+1)
             && ($z >= $pos1->z) && ($z <= $pos2->z);
@@ -51,11 +51,13 @@ class MineRegenerateTask extends AsyncTask {
     public function onRun(): void{
         $blockArray = [];
         foreach (unserialize($this->blocks) as $block => $value){
-            $blockArray = array_merge($blockArray, array_fill(0, $value, $block));
+            // $blockArray = array_merge($blockArray, array_fill(0, $value, $block));
+            // reminder to look at whatever the fuck the above line is
+            $blockArray[] = $value;
         }
 
-        $minY = $this->minPos->getY();
-        $maxY = $this->maxPos->getY()+1;
+        $minY = unserialize($this->minPos)->getY();
+        $maxY = unserialize($this->maxPos)->getY()+1;
 
         $newChunks = [];
 
@@ -72,10 +74,15 @@ class MineRegenerateTask extends AsyncTask {
                             continue;
                         }
 
-                        $block = explode(":", (string)$blockArray[array_rand($blockArray)]);
+                        // $block = explode(":", (string)$blockArray[array_rand($blockArray)]);
                         // $blockClass = BlockFactory::getInstance()->get((int)$block[0], isset($block[1]) ? (int)$block[1] : 0);
                         // $chunk->setFullBlock($x, $y, $z, $blockClass->getFullId());
-						$chunk->setBlockStateId($x, $y, $z, (int)$block[0]);
+                        // $chunk->setBlockStateId($x, $y, $z, (int)$block[0]);
+
+                        $blockString = (string)$blockArray[array_rand($blockArray)];
+                        $item = StringToItemParser::getInstance()->parse($blockString);
+                        $block = $item->getBlock()->getStateId();
+                        $chunk->setBlockStateId($x, $y, $z, $block);
 
                         ++$completedBlocks;
                     }
