@@ -164,11 +164,16 @@ class EnchantmentBookListener implements Listener{
                         return;
                     }
 
+                    $sameenchantprice = $enchant->getApplyPrice();
+
                     $enchant->setLevel($enchant->getLevel()+1);
                 }
             }
 
             $price = $enchant->getApplyPrice();
+            if (isset($sameenchantprice)) {
+                $price = $sameenchantprice;
+            }
 
             if(!$price->canAfford($player)){
                 $player->sendMessage("§r§l§c> §r§7You can't afford the §b{$price->getXPLevels()} XP levels §r§7required to apply this enchant.");

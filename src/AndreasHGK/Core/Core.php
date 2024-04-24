@@ -116,6 +116,7 @@ use AndreasHGK\Core\command\VoteCommand;
 use AndreasHGK\Core\command\WarnCommand;
 use AndreasHGK\Core\command\WarningsCommand;
 use AndreasHGK\Core\command\WorldCommand;
+use AndreasHGK\Core\command\XPCommand;
 use AndreasHGK\Core\crate\CrateListener;
 use AndreasHGK\Core\crate\CrateManager;
 use AndreasHGK\Core\enchant\CustomEnchantsManager;
@@ -521,6 +522,7 @@ final class Core extends PluginBase {
             new SuperlistCommand(),
             new NearCommand(),
             new KothCommand(),
+            new XPCommand(),
         ];
 
 		//RankSystem

@@ -49,7 +49,7 @@ class AutoMineRegenerateTask extends Task {
         $totalBlocks = $mine->getTotalBlocks();
         $blockCount = $mine->getBlockCount();
         if($blockCount/$totalBlocks <= 0.15){
-            Server::getInstance()->getLogger()->info("regenerating mine ".$mine->getName());
+            Server::getInstance()->getLogger()->info("Automatically regenerating mine ".$mine->getName());
             $mine->regenerate();
         }
     }
