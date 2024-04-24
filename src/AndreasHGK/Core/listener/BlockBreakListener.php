@@ -186,7 +186,7 @@ class BlockBreakListener implements Listener {
                     case VanillaItems::DIAMOND()->getTypeId():
                         $newDrop = VanillaItems::EMERALD();
                         break;
-                    case VanillaBlocks::COAL_BLOCK()->getTypeId():
+                    case VanillaBlocks::COAL()->getTypeId():
                         $newDrop = VanillaBlocks::IRON()->asItem();
                         break;
                     case VanillaBlocks::IRON()->getTypeId():
